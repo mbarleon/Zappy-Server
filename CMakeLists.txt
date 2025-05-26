@@ -83,6 +83,11 @@ target_compile_options(zappy-server PRIVATE
 
 target_link_libraries(zappy-server PRIVATE cextend)
 
+target_include_directories(zappy-server PRIVATE
+    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/external/lib-cextend/include>
+)
+
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     target_compile_options(zappy-server PRIVATE -Wno-format-truncation)
 endif()
@@ -92,7 +97,6 @@ endif()
 option(ZAP_SRV_ENABLE_DEBUG "Enable debug definition" OFF)
 
 if(ZAP_SRV_ENABLE_DEBUG)
-    target_compile_definitions(zappy-server PRIVATE ZAP_SRV_DEBUG=1)
     target_compile_definitions(zappy-server PRIVATE CEXTEND_DEBUG=1)
 endif()
 
@@ -118,7 +122,10 @@ target_compile_definitions(zap_srv_unit_tests PRIVATE UNIT_TESTS=1)
 
 target_link_libraries(zap_srv_unit_tests PRIVATE criterion sfml-graphics sfml-system sfml-window, cextend)
 
-target_include_directories(zap_srv_unit_tests PRIVATE ${CMAKE_SOURCE_DIR}/include)
+target_include_directories(zap_srv_unit_tests PRIVATE
+    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/external/lib-cextend/include>
+)
 
 enable_testing()
 add_test(NAME zap_srv_unit_tests COMMAND zap_srv_unit_tests)
@@ -128,6 +135,3 @@ add_custom_target(zap_srv_tests_run
     DEPENDS zap_srv_unit_tests
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 )
-
-get_property(_targets DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/external/lib-cextend PROPERTY BUILDSYSTEM_TARGETS)
-message(STATUS "Targets in lib-cextend: ${_targets}")
