@@ -89,9 +89,9 @@ endif()
 
 ########################################
 
-option(ENABLE_DEBUG "Enable debug definition" OFF)
+option(ZAP_SRV_ENABLE_DEBUG "Enable debug definition" OFF)
 
-if(ENABLE_DEBUG)
+if(ZAP_SRV_ENABLE_DEBUG)
     target_compile_definitions(zappy-server PRIVATE ZAP_SRV_DEBUG=1)
     target_compile_definitions(zappy-server PRIVATE CEXTEND_DEBUG=1)
 endif()

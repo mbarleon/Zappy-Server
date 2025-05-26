@@ -53,7 +53,7 @@ function _debug()
     _success "updated external submodules !"
     mkdir -p build
     cd build || _error "mkdir failed"
-    cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug -DENABLE_DEBUG=ON
+    cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug -DZAP_SRV_ENABLE_DEBUG=ON
     # INFO: Epitech's moulinette does: `cmake --build .` but this is slow as fuc
     if make -j"$(nproc)" zappy-server; then
         _success "compiled zappy-server"
