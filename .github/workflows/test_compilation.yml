@@ -1,0 +1,102 @@
+name: cextend_test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  check_coding_style:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cache coding style Docker image
+        id: cache-docker-image
+        uses: actions/cache@v4
+        with:
+          path: coding-style-checker.tar
+          key: coding-style-checker-ghcr-latest
+
+      - name: Load Docker image from cache or pull
+        run: |
+          if [ -f coding-style-checker.tar ]; then
+            docker load -i coding-style-checker.tar
+          else
+            docker pull ghcr.io/epitech/coding-style-checker:latest
+            docker save ghcr.io/epitech/coding-style-checker:latest -o coding-style-checker.tar
+          fi
+
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Run coding style check in container
+        run: |
+          docker run --rm --entrypoint bash -v "$PWD":"$PWD" -w "$PWD" ghcr.io/epitech/coding-style-checker:latest -c '
+            declare -i error=0
+            DIR=$(pwd)
+            check.sh $DIR $DIR
+            if test -s coding-style-reports.log; then
+              while IFS= read -r line; do
+                file=$(echo "$line" | cut -d":" -f1)
+                line_num=$(echo "$line" | cut -d":" -f2-3)
+                error_type=$(echo "$line" | cut -d" " -f2 | cut -d":" -f1)
+                if [ "$error_type" = "MAJOR" ]; then
+                  error+=3
+                fi
+                if [ "$error_type" = "MINOR" ]; then
+                  error+=1
+                fi
+                error_name=$(echo "$line" | cut -d":" -f4)
+                title="$error_type  coding style error:"
+                echo "::error file=$file,line=$line_num::$title $error_name"
+                if [ "$error" -ge 4 ]; then
+                  echo "::error:: /!\\ TOO MANY CODING_STYLE INFRINGMENTS /!\\"
+                  exit 1
+                fi
+              done < coding-style-reports.log
+              echo "$error"
+            else
+              echo "::notice:: No coding-style error detected, good work."
+            fi
+          '
+
+  check_program_compilation_ubuntu:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Check for build.sh
+        run: |
+          if [ ! -f "build.sh" ]; then
+            echo "::error ::/!\\ WARNING NO build.sh FOUND /!\\"
+            exit 84
+          else
+            echo "::notice::build.sh found."
+          fi
+
+      - name: Launch ./build.sh
+        run: |
+          if ./build.sh; then
+            echo "::notice file=build.sh::Successfully compiled (./build.sh)."
+          else
+            echo "::error file=build.sh::/!\\ COMPILATION ERROR (./build.sh)/!\\"
+            exit 84
+          fi
+
+      - name: Check shared library
+        run: |
+          lib_path="${EXECUTABLE_PATH}"
+          if [ ! -f "$lib_path" ]; then
+            echo "::error file=$lib_path::Shared library $lib_path is missing."
+            exit 84
+          elif ! file "$lib_path" | grep -q 'shared object'; then
+            echo "::error file=$lib_path::File $lib_path is not a valid shared library."
+            exit 84
+          else
+            echo "::notice file=$lib_path::Shared library $lib_path found and looks valid."
+          fi
+        env:
+          EXECUTABLE_PATH: ${{ vars.EXECUTABLE_PATH }}

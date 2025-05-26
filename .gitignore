@@ -49,3 +49,4 @@ temp/
 !CMakeLists.txt
 build/
 *.dylib
+!test_compilation.yml
