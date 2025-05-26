@@ -88,15 +88,12 @@ jobs:
 
       - name: Check shared library
         run: |
-          lib_path="${EXECUTABLE_PATH}"
-          if [ ! -f "$lib_path" ]; then
-            echo "::error file=$lib_path::Shared library $lib_path is missing."
-            exit 84
-          elif ! file "$lib_path" | grep -q 'shared object'; then
-            echo "::error file=$lib_path::File $lib_path is not a valid shared library."
+          executable="${EXECUTABLE_PATH}"
+          if [ ! -x "$executable" ]; then
+            echo "::error file=$executable::Executable $executable is missing or not executable."
             exit 84
           else
-            echo "::notice file=$lib_path::Shared library $lib_path found and looks valid."
+            echo "::notice file=$executable::Executable $executable found and is executable."
           fi
         env:
           EXECUTABLE_PATH: ${{ vars.EXECUTABLE_PATH }}
