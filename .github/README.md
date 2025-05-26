@@ -5,7 +5,7 @@
 </h1>
 
 <p align="center">
-  Not C, not C++, C+<br>
+  Server for zappy project<br>
 </p>
 
 ---
