@@ -93,6 +93,7 @@ option(ENABLE_DEBUG "Enable debug definition" OFF)
 
 if(ENABLE_DEBUG)
     target_compile_definitions(zappy-server PRIVATE ZAP_SRV_DEBUG=1)
+    target_compile_definitions(zappy-server PRIVATE CEXTEND_DEBUG=1)
 endif()
 
 ########################################

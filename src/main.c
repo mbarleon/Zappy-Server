@@ -9,6 +9,6 @@
 
 int main(__attribute__((unused))int ac, __attribute__((unused))char **av)
 {
-    CEXTEND_LOG(LOG_INFO, "Hello, World!");
+    CEXTEND_LOG(CEXTEND_LOG_INFO, "Hello, World!");
     return 0;
 }
