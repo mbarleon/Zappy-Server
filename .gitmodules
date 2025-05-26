@@ -1,0 +1,3 @@
+[submodule "external/lib-cextend"]
+	path = external/lib-cextend
+	url = https://github.com/mbarleon/lib-cextend.git
