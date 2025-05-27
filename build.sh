@@ -91,12 +91,14 @@ function _tests_run()
 function _clean()
 {
     rm -rf build
+    external/lib-cextend/build.sh -c
 }
 
 function _fclean()
 {
     _clean
-    rm -rf zappy-server unit_tests plugins code_coverage.txt unit_tests-*.profraw unit_tests.profdata vgcore* cmake-build-debug
+    rm -rf zappy-server unit_tests plugins code_coverage.txt unit_tests-*.profraw unit_tests.profdata vgcore* cmake-build-debug libs/*
+    external/lib-cextend/build.sh -f
 }
 
 for args in "$@"

@@ -5,12 +5,27 @@
 ** main
 */
 
+#include <stdio.h>
+#include <string.h>
 #include "cextend/logger.h"
-#include "cextend/entries/logger_init.h"
+#include "parse_args/parse_args.h"
 
-int main(__attribute__((unused))int ac, __attribute__((unused))char **av)
+static void print_helper(void)
 {
-    CEXTEND_INIT_LOG;
+    printf("Helper\n");
+}
+
+int main(int ac, const char **av)
+{
+    zap_srv_parsed_context_t ctxt;
+
+    for (int i = 1; i < ac; ++i) {
+        if (strcmp(av[i], "-h") == 0) {
+            print_helper();
+            return 0;
+        }
+    }
+    parse_args(ac, av, &ctxt);
     CEXTEND_LOG(CEXTEND_LOG_INFO, "Hello, World!");
     return 0;
 }
