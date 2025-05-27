@@ -14,7 +14,8 @@
 
 static void print_helper(void)
 {
-    printf("Helper\n");
+    printf("USAGE: ./zappy_server -p port -x width -y height -n name1 name2 "
+        "... -c clientsNb -f freq");
 }
 
 static int try_parse_args(int ac, const char **av,
@@ -43,9 +44,9 @@ int main(int ac, const char **av)
     zap_srv_parsed_context_t ctxt;
 
     for (int i = 1; i < ac; ++i) {
-        if (strcmp(av[i], "-h") == 0) {
+        if (strcmp(av[i], "-help") == 0) {
             print_helper();
-            return 0;
+            return ZAP_SRV_SUCCESS;
         }
     }
     if (try_parse_args(ac, av, &ctxt) == ZAP_SRV_ERROR) {
