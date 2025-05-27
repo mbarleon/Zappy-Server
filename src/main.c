@@ -15,7 +15,7 @@
 static void print_helper(void)
 {
     printf("USAGE: ./zappy_server -p port -x width -y height -n name1 name2 "
-        "... -c clientsNb -f freq");
+        "... -c clientsNb -f freq\n");
 }
 
 static int try_parse_args(int ac, const char **av,
