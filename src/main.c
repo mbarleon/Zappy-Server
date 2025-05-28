@@ -29,10 +29,12 @@ static int try_parse_args(int ac, const char **av,
     } CATCH(code, CEXTEND_EXCEPTION_BAD_ALLOC) {
         CEXTEND_LOG(CEXTEND_LOG_ERROR, "Caught exception in parsing: %s",
             get_exception_str(code));
+        END_TRY;
         return ZAP_SRV_ERROR;
     } CATCH(code, CEXTEND_EXCEPTION_INVALID_ARGUMENT) {
         CEXTEND_LOG(CEXTEND_LOG_ERROR, "Caught exception in parsing: %s",
             get_exception_str(code));
+        END_TRY;
         return ZAP_SRV_ERROR;
     } CATCH_END(code);
     END_TRY;
@@ -52,6 +54,5 @@ int main(int ac, const char **av)
     if (try_parse_args(ac, av, &ctxt) == ZAP_SRV_ERROR) {
         return ZAP_SRV_ERROR;
     }
-    CEXTEND_LOG(CEXTEND_LOG_INFO, "Hello, World!");
     return ZAP_SRV_SUCCESS;
 }

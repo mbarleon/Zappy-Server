@@ -42,12 +42,13 @@ static zap_srv_flags_t parse_flags(const char **av,
 
 void parse_args(int ac, const char **av, zap_srv_parsed_context_t *ctxt)
 {
+    int i = 1;
     zap_srv_flags_t ret = ZAP_SRV_FLAG_UNKNOWN;
     bool are_flags_init[ZAP_SRV_FLAG_LEN] = {false};
 
     memset(ctxt, 0, sizeof(zap_srv_parsed_context_t));
     ctxt->server.frequency = 100;
-    for (int i = 1; i < ac; ++i) {
+    while (i < ac) {
         ret = parse_flags(av, ctxt, &i);
         if (ret == ZAP_SRV_FLAG_UNKNOWN) {
             THROW(CEXTEND_EXCEPTION_INVALID_ARGUMENT);

@@ -36,6 +36,8 @@ zap_srv_flags_t handle_n_flag(const char **av, zap_srv_parsed_context_t *ctxt,
 {
     while (!is_a_flag(av[(*i + 1)]) && av[(*i + 1)]) {
         create_team(ctxt, av[(*i + 1)]);
+        *i += 1;
     }
+    *i += 1;
     return ZAP_SRV_FLAG_N;
 }
