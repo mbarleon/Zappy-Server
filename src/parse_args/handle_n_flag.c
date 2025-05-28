@@ -10,8 +10,12 @@
 static void create_team(zap_srv_parsed_context_t *ctxt, const char *str)
 {
     zap_srv_team_t *tmp;
-    zap_srv_team_t *new_team = safe_malloc(sizeof(zap_srv_team_t), NULL);
+    zap_srv_team_t *new_team;
 
+    if (strcmp(str, "GRAPHIC") == 0) {
+        THROW(CEXTEND_EXCEPTION_INVALID_ARGUMENT);
+    }
+    new_team = safe_malloc(sizeof(zap_srv_team_t), NULL);
     new_team->next = NULL;
     new_team->num_clients = 0;
     new_team->name = safe_strdup(str);
