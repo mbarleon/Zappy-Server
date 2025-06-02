@@ -9,7 +9,7 @@
     #define ZAP_SRV_TEAMS_INTERNAL_H_
     #include "teams.h"
     #include <string.h>
-    #include "cextend/memory.h"
-    #include "cextend/exception.h"
+    #include <cextend/memory.h>
+    #include <cextend/exception.h>
 
 #endif /* !ZAP_SRV_TEAMS_INTERNAL_H_ */

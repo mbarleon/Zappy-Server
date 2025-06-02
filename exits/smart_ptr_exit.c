@@ -6,7 +6,7 @@
 */
 
 #include "exits.h"
-#include "cextend/exit/memory_exit.h"
+#include <cextend/exit/memory_exit.h>
 
 __attribute__((destructor(CEXTEND_FREE_MEM_EXIT)))
 static void free_mem_exit(void)
