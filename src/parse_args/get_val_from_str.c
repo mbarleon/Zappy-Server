@@ -7,6 +7,21 @@
 
 #include "parse_args_internal.h"
 
+/**
+ * @brief Converts a string to a size_t value.
+ *
+ * Parses the input string as an unsigned integer and returns its value as
+ * size_t.
+ * @throws CEXTEND_EXCEPTION_INVALID_ARGUMENT if:
+ *   - The input string is NULL,
+ *   - The string does not represent a valid number,
+ *   - The value is out of range for size_t,
+ *   - The string contains extra characters after the number.
+ *
+ * @param str The string to convert.
+ *
+ * @return The converted size_t value.
+ */
 size_t get_size_t_from_str(const char *str)
 {
     char *endptr = NULL;
@@ -24,6 +39,21 @@ size_t get_size_t_from_str(const char *str)
     return (size_t)val;
 }
 
+/**
+ * @brief Converts a string to a uint16_t value.
+ *
+ * Parses the input string as an unsigned integer and returns its value as
+ * uint16_t.
+ * @throws CEXTEND_EXCEPTION_INVALID_ARGUMENT if:
+ *   - The input string is NULL,
+ *   - The string does not represent a valid number,
+ *   - The value is out of range for uint16_t,
+ *   - The string contains extra characters after the number.
+ *
+ * @param str The string to convert.
+ *
+ * @return The converted uint16_t value.
+ */
 uint16_t get_uint16_from_str(const char *str)
 {
     char *endptr = NULL;

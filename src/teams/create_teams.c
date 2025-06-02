@@ -7,6 +7,25 @@
 
 #include "teams_internal.h"
 
+/**
+ * @brief Creates a new team and adds it to the linked list of teams.
+ *
+ * This function allocates and initializes a new zap_srv_team_t structure with
+ * the given team name and maximum number of clients. The new team is appended
+ * to the end of the teams linked list, unless the list is empty, in which
+ * case it becomes the head.
+ *
+ * The function does not allow creation of a team named "GRAPHIC".
+ *
+ * @param teams Pointer to the head pointer of the linked list of teams.
+ * @param str Name of the team to create. Must not be "GRAPHIC".
+ * @param max_clients Maximum number of clients allowed in the team.
+ *
+ * @throws CEXTEND_EXCEPTION_INVALID_ARGUMENT if teams is NULL or str is
+ * "GRAPHIC".
+ * @throws CEXTEND_EXCEPTION_BAD_ALLOC if memory allocation fails
+ * (via safe_malloc or safe_strdup).
+ */
 void create_team(zap_srv_team_t **teams, const char *str, size_t max_clients)
 {
     zap_srv_team_t *tmp;

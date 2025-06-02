@@ -7,6 +7,24 @@
 
 #include "parse_args_internal.h"
 
+/**
+ * @brief Handles the '-y' flag from the command-line arguments, which
+ * specifies the height (y-dimension) of the map for the Zappy server.
+ *
+ * This function parses the value following the '-y' flag, converts it to a
+ * size_t, and updates the map height in the provided context structure.
+ * It also advances the argument index accordingly.
+ *
+ * @param av The array of command-line argument strings.
+ * @param ctxt Pointer to the parsed context structure to update.
+ * @param i Pointer to the current index in the argument array; will be
+ * incremented by 2 to skip the flag and its value.
+ *
+ * @throws CEXTEND_EXCEPTION_INVALID_ARGUMENT if the value is invalid
+ * (via get_size_t_from_str).
+ *
+ * @return ZAP_SRV_FLAG_Y to indicate the '-y' flag was handled.
+ */
 zap_srv_flags_t handle_y_flag(const char **av, zap_srv_parsed_context_t *ctxt,
     int *i)
 {
