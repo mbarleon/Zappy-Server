@@ -51,6 +51,7 @@ static int try_parse_args(int ac, const char **av,
 
     TRY(code, except_ctxt) {
         parse_args(ac, av, ctxt);
+        generate_map(&ctxt->map);
     } CATCH(code, CEXTEND_EXCEPTION_BAD_ALLOC) {
         CEXTEND_LOG(CEXTEND_LOG_ERROR, "Caught exception in parsing: %s",
             get_exception_str(code));
