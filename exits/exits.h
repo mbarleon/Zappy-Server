@@ -28,4 +28,6 @@ typedef enum {
     CEXTEND_FREE_MEM_EXIT
 } cextend_destructor_priotiries_t;
 
+void free_mem_exit(void);
+
 #endif /* !CEXTEND_EXITS_H_ */

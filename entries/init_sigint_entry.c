@@ -11,7 +11,8 @@
 #include "../src/server/server_internal.h"
 
 __attribute__((constructor(ZAP_SRV_INIT_SIGINT_ENTRY)))
-static void init_sigint_handler(void) {
+void init_sigint_handler(void)
+{
     struct sigaction sa;
 
     memset(&sa, 0, sizeof(sa));

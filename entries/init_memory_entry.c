@@ -19,7 +19,7 @@
  * priority value for the constructor attribute, if needed.
  */
 __attribute__((constructor(CEXTEND_INIT_MEMORY_ENTRY)))
-static void initialize_memory_entry(void)
+void initialize_memory_entry(void)
 {
     should_free_on_abort(true);
 }

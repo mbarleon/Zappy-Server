@@ -19,7 +19,7 @@
  * @note The constructor priority is set by ZAP_SRV_INIT_RAND_ENTRY.
  */
 __attribute__((constructor(ZAP_SRV_INIT_RAND_ENTRY)))
-static void initialize_srand_entry(void)
+void initialize_srand_entry(void)
 {
     srand((unsigned int)time(NULL));
 }

@@ -38,4 +38,9 @@ typedef enum {
     CEXTEND_INIT_MEMORY_ENTRY
 } cextend_constructor_priotiries_t;
 
+void initialize_log_entry(void);
+void initialize_memory_entry(void);
+void initialize_srand_entry(void);
+void init_sigint_handler(void);
+
 #endif /* !CEXTEND_ENTRIES_H_ */

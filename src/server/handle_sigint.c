@@ -11,14 +11,24 @@ bool keep_running(bool running)
 {
     static bool ret = true;
 
-    if (running == true)
+    if (running == true) {
         ret = false;
+    }
     return ret;
 }
 
 void handle_sigint(UNUSED int sig, UNUSED siginfo_t *info,
     UNUSED void *ucontext)
 {
-    CEXTEND_LOG(CEXTEND_LOG_INFO, "Stopping server...");
+    static int sigint_count = 0;
+
+    if (sigint_count == 0) {
+        CEXTEND_LOG(CEXTEND_LOG_INFO, "Stopping server...");
+    }
+    sigint_count++;
+    if (sigint_count >= 3) {
+        CEXTEND_PRT(CEXTEND_LOG_ERROR, "3 SIGINT detected, aborting.");
+        abort();
+    }
     keep_running(true);
 }
