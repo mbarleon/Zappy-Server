@@ -26,8 +26,9 @@ void handle_sigint(UNUSED int sig, UNUSED siginfo_t *info,
         CEXTEND_LOG(CEXTEND_LOG_INFO, "Stopping server...");
     }
     sigint_count++;
-    if (sigint_count >= 3) {
-        CEXTEND_PRT(CEXTEND_LOG_ERROR, "3 SIGINT detected, aborting.");
+    if (sigint_count >= ZAP_SRV_MAX_SIGINT) {
+        CEXTEND_PRT(CEXTEND_LOG_ERROR, "%d SIGINT detected, aborting.",
+            ZAP_SRV_MAX_SIGINT);
         abort();
     }
     keep_running(true);

@@ -13,6 +13,7 @@
     #include <stdbool.h>
     #include <cextend/macro.h>
     #include <cextend/logger.h>
+    #define ZAP_SRV_MAX_SIGINT 3
 
 bool keep_running(bool running);
 void handle_sigint(UNUSED int sig, UNUSED siginfo_t *info,
