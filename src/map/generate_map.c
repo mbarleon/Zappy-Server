@@ -189,11 +189,10 @@ static void place_elements_on_map(zap_srv_map_t *map, zap_srv_pos_t *positions,
         total_to_place += element_targets[i];
     while (total_to_place > 0) {
         if (placed[elem] < element_targets[elem]) {
-            pos_idx = pos_idx >= map_size ? 0 : pos_idx;
             try_place_elem(map, positions, elem, pos_idx);
             placed[elem]++;
             total_to_place--;
-            pos_idx++;
+            pos_idx = (pos_idx + 1) % map_size;
         }
         elem = (elem + 1) % ZAP_SRV_ELEMENTS_QUANTITY;
     }

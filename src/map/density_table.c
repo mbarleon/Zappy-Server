@@ -13,8 +13,7 @@
  * This static constant array associates each resource type (such as FOOD,
  * LINEMATE, etc.)
  * with a floating-point density value, which determines the relative abundance
- * of each
- * resource when generating the map in the Zappy server.
+ * of each resource when generating the map in the Zappy server.
  *
  * Each entry in the table is of type zap_srv_dentity_table_t, containing:
  *   - The resource identifier (e.g., FOOD, LINEMATE)
