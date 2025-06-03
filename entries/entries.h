@@ -32,7 +32,7 @@
 
 typedef enum {
     CEXTEND_MIN_ENTRY = 101,
-    ZAP_SRV_INIT_SIGINT_ENTRY,
+    ZAP_SRV_INIT_SIGNALS_ENTRY,
     ZAP_SRV_INIT_RAND_ENTRY,
     CEXTEND_INIT_LOG_ENTRY,
     CEXTEND_INIT_MEMORY_ENTRY
@@ -41,6 +41,6 @@ typedef enum {
 void initialize_log_entry(void);
 void initialize_memory_entry(void);
 void initialize_srand_entry(void);
-void init_sigint_handler(void);
+void init_signals_handler(void);
 
 #endif /* !CEXTEND_ENTRIES_H_ */
