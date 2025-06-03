@@ -9,7 +9,7 @@
     #define ZAP_SRV_PARSE_ARGS_H_
     #include "../map/map.h"
     #include "../teams/teams.h"
-    #include "../server/server.h"
+    #include "../server/zap_srv_t.h"
 
 /**
  * @brief Structure holding the parsed context for the Zappy server.
