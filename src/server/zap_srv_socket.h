@@ -26,7 +26,7 @@ typedef struct {
     /**
      * @brief Port number on which the server socket is bound.
      */
-    int port;
+    uint16_t port;
     /**
      * @brief String representation of the IP address the socket is bound to.
      */

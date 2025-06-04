@@ -7,6 +7,7 @@
 
 #ifndef ZAP_SRV_T_H_
     #define ZAP_SRV_T_H_
+    #include <poll.h>
     #include <stddef.h>
     #include <stdint.h>
     #include "zap_srv_socket.h"
@@ -25,9 +26,9 @@
  * game.
  */
 typedef enum {
-    NONE = -1,
-    GRAPHICAL,
-    PLAYER
+    ZAP_SRV_NONE_CLIENT = -1,
+    ZAP_SRV_GRAPHICAL_CLIENT,
+    ZAP_SRV_PLAYER_CLIENT
 } client_type_t;
 
 /**
@@ -57,6 +58,10 @@ typedef struct {
  */
 typedef struct {
     /**
+     * @brief Current number of clients
+     */
+    size_t num_clients;
+    /**
      * @brief The network port number on which the server listens
      * (16-bit unsigned integer).
      */
@@ -69,6 +74,18 @@ typedef struct {
      * @brief The socket of the server.
      */
     zap_srv_socket_t sock;
+    /**
+     * @brief List of all the clients.
+     */
+    zap_srv_client_list_t clients;
+    /**
+     * @brief List of all the fds.
+     */
+    struct pollfd fds[ZAP_SRV_MAX_CLIENTS + 1];
+    /**
+     * @brief List of all the ports.
+     */
+    int32_t port_list[ZAP_SRV_MAX_CLIENTS];
 } zap_srv_t;
 
 #endif /* !ZAP_SRV_T_H_ */

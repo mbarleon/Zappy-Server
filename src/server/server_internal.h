@@ -23,11 +23,16 @@
     #include "../string/string_entry_table.h"
 
     #define ZAP_SRV_MAX_SIGINT 3
+    #define ZAP_SRV_TIMEOUT 10000
 
 bool keep_running(bool running);
 void handle_signals(UNUSED int sig, UNUSED siginfo_t *info,
     UNUSED void *ucontext);
+
 void close_sock(zap_srv_socket_t *sock);
 void init_server_socket(zap_srv_t *srv);
+
+void accept_new_clients(UNUSED zap_srv_parsed_context_t *ctxt);
+void read_message_from_clients(UNUSED zap_srv_parsed_context_t *ctxt);
 
 #endif /* !ZAP_SRV_SERVER_INTERNAL_H_ */

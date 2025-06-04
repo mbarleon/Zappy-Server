@@ -29,6 +29,7 @@ static const char *string_table[] = {
     "Missing string in string entry table.",
 
     "socket failed.",
+    "poll failed",
     "bind failed.",
     "getsockname failed.",
     "listen failed.",
