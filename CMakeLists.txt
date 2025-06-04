@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(zappy-server VERSION 1.0)
+project(zappy_server VERSION 1.0)
 
 set(CMAKE_C_STANDARD 17)
 set(CMAKE_C_STANDARD_REQUIRED ON)
@@ -22,7 +22,7 @@ endif()
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 ########################################
-# NOTE: zappy-server configuration
+# NOTE: zappy_server configuration
 ########################################
 add_subdirectory(external/lib-cextend EXCLUDE_FROM_ALL)
 
@@ -46,13 +46,13 @@ endif()
 set(CMAKE_INSTALL_RPATH "${MY_RPATH}")
 set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
 
-add_executable(zappy-server
+add_executable(zappy_server
     ${MAIN_SOURCE}
     ${EXITS_SOURCE}
     ${ENTRIES_SOURCE}
 )
 
-target_compile_options(zappy-server PRIVATE
+target_compile_options(zappy_server PRIVATE
     # INFO: classic warnings
     -Wall
     -Wextra
@@ -90,15 +90,15 @@ target_compile_options(zappy-server PRIVATE
     -Wno-format-security
 )
 
-target_link_libraries(zappy-server PRIVATE cextend)
+target_link_libraries(zappy_server PRIVATE cextend)
 
-target_include_directories(zappy-server PRIVATE
+target_include_directories(zappy_server PRIVATE
     $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
     $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/external/lib-cextend/include>
 )
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    target_compile_options(zappy-server PRIVATE -Wno-format-truncation)
+    target_compile_options(zappy_server PRIVATE -Wno-format-truncation)
 endif()
 
 ########################################
@@ -106,7 +106,7 @@ endif()
 option(ZAP_SRV_ENABLE_DEBUG "Enable debug definition" OFF)
 
 if(ZAP_SRV_ENABLE_DEBUG)
-    target_compile_definitions(zappy-server PRIVATE CEXTEND_DEBUG=1)
+    target_compile_definitions(zappy_server PRIVATE CEXTEND_DEBUG=1)
 endif()
 
 ########################################
