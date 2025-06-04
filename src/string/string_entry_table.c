@@ -7,6 +7,24 @@
 
 #include "string_entry_table.h"
 
+/**
+ * @brief Table of constant strings used for various server messages and
+ * errors.
+ *
+ * This static array contains string literals for error messages, usage
+ * instructions, and other informational messages used throughout the server
+ * codebase.
+ * The first and last entries serve as placeholders for missing strings.
+ *
+ * Entries include:
+ * - General error messages (e.g., "socket failed.", "bind failed.")
+ * - Server status messages (e.g., "Server listening on %s:%d.")
+ * - Usage instructions for the server executable
+ * - Exception handling messages
+ *
+ * @note The array is intended for internal use within the string_entry_table
+ * module.
+ */
 static const char *string_table[] = {
     "Missing string in string entry table.",
 
@@ -24,6 +42,19 @@ static const char *string_table[] = {
     "Missing string in string entry table."
 };
 
+/**
+ * @brief Retrieves a string from the string table based on the given entry.
+ *
+ * This function returns the string corresponding to the specified
+ * zap_srv_string_entries_t entry from the string_table array. If the entry
+ * is out of bounds (less than or equal to ZAP_SRV_STRING_MIN or greater than
+ * or equal to ZAP_SRV_STRING_MAX), it returns the string at
+ * string_table[ZAP_SRV_STRING_MAX] as a fallback.
+ *
+ * @param entry The enum value representing the string entry to fetch.
+ * @return const char* The corresponding string from the string table, or
+ *         the fallback string if the entry is invalid.
+ */
 const char *fetch_string(const zap_srv_string_entries_t entry)
 {
     if (entry <= ZAP_SRV_STRING_MIN || entry >= ZAP_SRV_STRING_MAX) {

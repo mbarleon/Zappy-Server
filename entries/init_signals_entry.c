@@ -10,6 +10,18 @@
 #include "entries.h"
 #include "../src/server/server_internal.h"
 
+/**
+ * @brief Initializes signal handlers for the server.
+ *
+ * This function is automatically called at program startup due to the
+ * constructor attribute. It sets up custom handlers for SIGINT and SIGTERM
+ * signals using the sigaction API, allowing the server to handle
+ * interruptions and termination requests gracefully.
+ *
+ * The signal handler function used is `handle_signals`, which should be
+ * defined elsewhere in the codebase. The SA_SIGINFO flag is set to provide
+ * additional information to the handler.
+ */
 __attribute__((constructor(ZAP_SRV_INIT_SIGNALS_ENTRY)))
 void init_signals_handler(void)
 {

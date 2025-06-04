@@ -23,7 +23,6 @@
     #include "../string/string_entry_table.h"
 
     #define ZAP_SRV_MAX_SIGINT 3
-    #define ZAP_SRV_MAX_CLIENTS 100000
 
 bool keep_running(bool running);
 void handle_signals(UNUSED int sig, UNUSED siginfo_t *info,
