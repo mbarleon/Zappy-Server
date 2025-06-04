@@ -14,7 +14,9 @@ static char *try_realloc(char **line, size_t size)
     char *new_line = NULL;
 
     TRY(code, except_ctxt) {
-        new_line = (char *)safe_realloc(*line, sizeof(char) * size, NULL);
+        if (size <= ZAP_SRV_MAX_LINE_SIZE) {
+            new_line = (char *)safe_realloc(*line, sizeof(char) * size, NULL);
+        }
     } CATCH(code, CEXTEND_EXCEPTION_BAD_ALLOC) {
         END_TRY;
         return NULL;
@@ -72,6 +74,11 @@ static int initial_error_handling(char **line, size_t buffer_size,
     return 0;
 }
 
+static int is_valid_char(char c)
+{
+    return c == '\n' || c == '\t' || (c >= 32 && c <= 126);
+}
+
 ssize_t recv_client(char **line, zap_srv_socket_t *client, size_t *buf_size)
 {
     char c = 0;
@@ -84,8 +91,8 @@ ssize_t recv_client(char **line, zap_srv_socket_t *client, size_t *buf_size)
         return -1;
     for (bytes_read = read(client->fd, &c, 1); bytes_read > 0;
         bytes_read = read(client->fd, &c, 1)) {
-        if ((size_t)(len + 1) >= *buf_size &&
-            resize_buffer(line, buf_size) == -1)
+        if (!is_valid_char(c) || ((size_t)(len + 1) >= *buf_size &&
+            resize_buffer(line, buf_size) == -1))
             return -1;
         (*line)[len] = c;
         len++;
