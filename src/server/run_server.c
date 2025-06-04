@@ -22,6 +22,20 @@ static void init_server(zap_srv_t *server)
     server->num_clients = 0;
 }
 
+static void try_accept_clients(zap_srv_parsed_context_t *ctxt)
+{
+    cextend_exception_code_t code = 0;
+    cextend_exception_context_t *except_ctxt = INIT_TRY;
+
+    TRY(code, except_ctxt) {
+        accept_new_clients(ctxt);
+    } CATCH(code, CEXTEND_EXCEPTION_BAD_ALLOC) {
+        END_TRY;
+        return;
+    } CATCH_END(code);
+    END_TRY;
+}
+
 void run_server(zap_srv_parsed_context_t *ctxt)
 {
     int poll_count = -1;
@@ -36,7 +50,7 @@ void run_server(zap_srv_parsed_context_t *ctxt)
         }
         if (keep_running(false) && poll_count > 0 &&
             (ctxt->server.fds[0].revents & POLLIN)) {
-            accept_new_clients(ctxt);
+            try_accept_clients(ctxt);
         }
         if (keep_running(false)) {
             read_message_from_clients(ctxt);
