@@ -14,7 +14,7 @@ void close_sock(zap_srv_socket_t *sock)
         sock->fd = -1;
     }
     if (sock->ip) {
-        free(sock->ip);
+        safe_free((void **)&sock->ip);
         sock->ip = NULL;
     }
 }
