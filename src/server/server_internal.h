@@ -39,4 +39,7 @@ void read_message_from_clients(zap_srv_parsed_context_t *ctxt);
 
 void send_client(const char *buffer, zap_srv_socket_t *client);
 
+void disconnect_client(zap_srv_t *server, size_t i);
+void handle_client_disconnect(zap_srv_socket_t *client);
+
 #endif /* !ZAP_SRV_SERVER_INTERNAL_H_ */

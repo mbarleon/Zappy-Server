@@ -13,6 +13,7 @@
     #include "zap_srv_socket.h"
     #include "../players/players.h"
 
+    #define ZAP_SRV_SOCK_ERROR INT32_MIN
     #define ZAP_SRV_MAX_CLIENTS (UINT16_MAX - 10000)
 
 /**
