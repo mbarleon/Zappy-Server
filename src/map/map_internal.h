@@ -8,11 +8,11 @@
 #ifndef ZAP_SRV_MAP_INTERNAL_H_
     #define ZAP_SRV_MAP_INTERNAL_H_
     #include "map.h"
+    #include "types.h"
     #include <stdlib.h>
     #include <stdbool.h>
     #include <cextend/memory.h>
 
-    #define ZAP_SRV_ELEMENTS_QUANTITY 7
 /**
  * @brief Structure representing an entry in the density table for server
  * elements.
@@ -34,24 +34,6 @@ typedef struct zap_srv_dentity_table_s {
      */
     float density;
 } zap_srv_dentity_table_t;
-
-/**
- * @brief Represents a position on the map with x and y coordinates.
- *
- * This structure is used to store the coordinates of a position
- * on the Zappy server map.
- */
-typedef struct {
-    /**
-     * @brief X coordinate of the position.
-     */
-    size_t x;
-    /**
-     * @brief Y coordinate of the position.
-     */
-    size_t y;
-} zap_srv_pos_t;
-
 
 extern const zap_srv_dentity_table_t density_table[];
 zap_srv_dentity_table_t *compute_density(const zap_srv_map_t *map);

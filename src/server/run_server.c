@@ -7,7 +7,13 @@
 
 #include "server_internal.h"
 
-void run_server(UNUSED zap_srv_parsed_context_t *ctxt)
+static void init_server(zap_srv_t *server)
 {
+    init_server_socket(server);
+}
+
+void run_server(zap_srv_parsed_context_t *ctxt)
+{
+    init_server(&ctxt->server);
     while (keep_running(false));
 }

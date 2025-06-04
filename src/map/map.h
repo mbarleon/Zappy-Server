@@ -8,49 +8,7 @@
 #ifndef ZAP_SRV_MAP_H_
     #define ZAP_SRV_MAP_H_
     #include <stddef.h>
-
-/**
- * @enum zap_srv_elements_t
- * @brief Enumerates the different types of elements that can exist on the
- * Zappy server map.
- *
- * The elements include:
- * - FOOD: Represents food items.
- * - LINEMATE: Represents the linemate resource.
- * - DERAUMERE: Represents the deraumere resource.
- * - SIBUR: Represents the sibur resource.
- * - MENDIANE: Represents the mendiane resource.
- * - PHIRAS: Represents the phiras resource.
- * - THYSTAME: Represents the thystame resource.
- */
-typedef enum {
-    FOOD,
-    LINEMATE,
-    DERAUMERE,
-    SIBUR,
-    MENDIANE,
-    PHIRAS,
-    THYSTAME
-} zap_srv_elements_t;
-
-/**
- * @struct zap_srv_elements_list_s
- * @brief Linked list node structure for storing elements on the Zappy server
- * map.
- *
- * This structure contains an element type and a pointer to the next node in
- * the list.
- */
-typedef struct zap_srv_elements_list_s {
-    /**
-     * @brief The type of element stored in this node.
-     */
-    zap_srv_elements_t element;
-    /**
-     * @brief Pointer to the next element in the list.
-     */
-    struct zap_srv_elements_list_s *next;
-} zap_srv_elements_list_t;
+    #include "../elements/elements.h"
 
 /**
  * @struct zap_srv_map_t

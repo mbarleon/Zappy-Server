@@ -10,6 +10,6 @@
     #include "zap_srv_t.h"
     #include "../parse_args/parse_args.h"
 
-void run_server(__attribute__((unused)) zap_srv_parsed_context_t *ctxt);
+void run_server(zap_srv_parsed_context_t *ctxt);
 
 #endif /* !ZAP_SRV_SERVER_H_ */
