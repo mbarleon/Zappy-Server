@@ -7,6 +7,16 @@
 
 #include "teams_internal.h"
 
+static bool is_valid_characters(const char *str)
+{
+    for (size_t i = 0; str[i]; ++i) {
+        if (str[i] != '-' && str[i] != '_' && !isalnum(str[i])) {
+            return false;
+        }
+    }
+    return true;
+}
+
 /**
  * @brief Creates a new team and adds it to the linked list of teams.
  *
@@ -31,7 +41,7 @@ void create_team(zap_srv_team_t **teams, const char *str, size_t max_clients)
     zap_srv_team_t *tmp;
     zap_srv_team_t *new_team;
 
-    if (!teams || strcmp(str, "GRAPHIC") == 0) {
+    if (!teams || strcmp(str, "GRAPHIC") == 0 || !is_valid_characters(str)) {
         THROW(CEXTEND_EXCEPTION_INVALID_ARGUMENT);
     }
     new_team = safe_malloc(sizeof(zap_srv_team_t), NULL);

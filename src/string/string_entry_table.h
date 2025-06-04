@@ -32,7 +32,9 @@
  */
 typedef enum {
     ZAP_SRV_STRING_MIN = 0,
+
     ZAP_SRV_SOCKET_FAIL,
+    ZAP_SRV_ACCEPT_FAIL,
     ZAP_SRV_POLL_FAIL,
     ZAP_SRV_BIND_FAIL,
     ZAP_SRV_GETSOCKNAME_FAIL,
@@ -42,6 +44,10 @@ typedef enum {
     ZAP_SRV_SERVER_ABORT,
     ZAP_SRV_USAGE,
     ZAP_SRV_CAUGHT_ERROR,
+    ZAP_SRV_MAX_CLIENT_ERR,
+    ZAP_SRV_CLIENT_CONNECT,
+    ZAP_SRV_CLIENT_ERR,
+
     ZAP_SRV_STRING_MAX
 } zap_srv_string_entries_t;
 

@@ -7,6 +7,7 @@
 
 #ifndef ZAP_SRV_SERVER_INTERNAL_H_
     #define ZAP_SRV_SERVER_INTERNAL_H_
+    #include <stdio.h>
     #include "macro.h"
     #include "server.h"
     #include <unistd.h>
@@ -20,6 +21,7 @@
     #include <cextend/memory.h>
     #include "zap_srv_socket.h"
     #include <cextend/exception.h>
+    #include "../string/message_entry_table.h"
     #include "../string/string_entry_table.h"
 
     #define ZAP_SRV_MAX_SIGINT 3
@@ -33,6 +35,8 @@ void close_sock(zap_srv_socket_t *sock);
 void init_server_socket(zap_srv_t *srv);
 
 void accept_new_clients(UNUSED zap_srv_parsed_context_t *ctxt);
-void read_message_from_clients(UNUSED zap_srv_parsed_context_t *ctxt);
+void read_message_from_clients(zap_srv_parsed_context_t *ctxt);
+
+void send_client(const char *buffer, zap_srv_socket_t *client);
 
 #endif /* !ZAP_SRV_SERVER_INTERNAL_H_ */

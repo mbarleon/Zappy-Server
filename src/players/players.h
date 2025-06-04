@@ -50,6 +50,6 @@ typedef struct {
      * @brief Buffer holding the player's pending actions.
      */
     zap_srv_player_actions_t actions_buffer[ZAP_SRV_MAX_ACTIONS];
-} player_t;
+} zap_srv_player_t;
 
 #endif /* !ZAP_SRV_PLAYERS_H_ */

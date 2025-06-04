@@ -10,10 +10,8 @@
 static void init_server(zap_srv_t *server)
 {
     init_server_socket(server);
-    for (size_t i = 0; i < ZAP_SRV_MAX_CLIENTS; ++i) {
-        server->clients.clients[i] = NULL;
-        server->clients.types[i] = ZAP_SRV_NONE_CLIENT;
-    }
+    server->clients = safe_calloc(ZAP_SRV_MAX_CLIENTS,
+        sizeof(zap_srv_player_t), NULL);
     server->fds[0].fd = server->sock.fd;
     server->fds[0].events = POLLIN;
     for (int i = 1; i <= ZAP_SRV_MAX_CLIENTS; ++i) {
@@ -30,8 +28,8 @@ void run_server(zap_srv_parsed_context_t *ctxt)
 
     init_server(&ctxt->server);
     while (keep_running(false)) {
-        poll_count = poll(ctxt->server.fds, ctxt->server.num_clients + 1,
-            ZAP_SRV_TIMEOUT);
+        poll_count = poll(ctxt->server.fds,
+            (nfds_t)(ctxt->server.num_clients + 1), ZAP_SRV_TIMEOUT);
         if (keep_running(false) && poll_count < 0) {
             CEXTEND_LOG(CEXTEND_LOG_INFO, fetch_string(ZAP_SRV_POLL_FAIL));
             break;
