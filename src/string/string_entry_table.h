@@ -18,8 +18,7 @@ typedef enum {
     ZAP_SRV_SERVER_STOP,
     ZAP_SRV_SERVER_ABORT,
     ZAP_SRV_USAGE,
-    ZAP_SRV_PARSING_ERROR,
-    ZAP_SRV_RUNTIME_ERROR,
+    ZAP_SRV_CAUGHT_ERROR,
     ZAP_SRV_STRING_MAX
 } zap_srv_string_entries_t;
 

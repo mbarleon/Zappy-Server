@@ -54,11 +54,11 @@ static int try_parse_args(int ac, const char **av,
         parse_args(ac, av, ctxt);
         generate_map(&ctxt->map);
     } CATCH(code, CEXTEND_EXCEPTION_BAD_ALLOC) {
-        CEXTEND_LOG(CEXTEND_LOG_ERROR, fetch_string(ZAP_SRV_PARSING_ERROR),
-            get_exception_str(code));
+        CEXTEND_LOG(CEXTEND_LOG_ERROR, fetch_string(ZAP_SRV_CAUGHT_ERROR),
+            "parsing", get_exception_str(code));
     } CATCH(code, CEXTEND_EXCEPTION_INVALID_ARGUMENT) {
-        CEXTEND_LOG(CEXTEND_LOG_ERROR, fetch_string(ZAP_SRV_PARSING_ERROR),
-            get_exception_str(code));
+        CEXTEND_LOG(CEXTEND_LOG_ERROR, fetch_string(ZAP_SRV_CAUGHT_ERROR),
+            "parsing", get_exception_str(code));
     } CATCH_END(code);
     END_TRY;
     return code ? ZAP_SRV_ERROR : ZAP_SRV_SUCCESS;
@@ -84,8 +84,8 @@ static int try_run_server(zap_srv_parsed_context_t *ctxt)
     TRY(code, except_ctxt) {
         run_server(ctxt);
     } CATCH_ALL {
-        CEXTEND_LOG(CEXTEND_LOG_ERROR, fetch_string(ZAP_SRV_RUNTIME_ERROR),
-            get_exception_str(code));
+        CEXTEND_LOG(CEXTEND_LOG_ERROR, fetch_string(ZAP_SRV_CAUGHT_ERROR),
+            "server runtime", get_exception_str(code));
     }
     END_TRY;
     return code ? ZAP_SRV_ERROR : ZAP_SRV_SUCCESS;

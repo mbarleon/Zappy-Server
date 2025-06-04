@@ -19,8 +19,7 @@ static const char *string_table[] = {
     "%d SIGINT or SIGTERM detected, aborting.",
     ("USAGE: ./zappy_server -p port -x width -y height -n name1 name2 ... -c "
         "clientsNb -f freq\n"),
-    "Caught exception in parsing: %s",
-    "Caught exception in server running: %s",
+    "Caught exception in %s: %s",
 
     "Missing string in string entry table."
 };
