@@ -23,12 +23,12 @@ void handle_signals(UNUSED int sig, UNUSED siginfo_t *info,
     static volatile sig_atomic_t sig_count = 0;
 
     if (sig_count == 0) {
-        CEXTEND_LOG(CEXTEND_LOG_INFO, "Stopping server...");
+        CEXTEND_LOG(CEXTEND_LOG_INFO, fetch_string(ZAP_SRV_SERVER_STOP));
     }
     sig_count++;
     if (sig_count >= ZAP_SRV_MAX_SIGINT) {
-        CEXTEND_PRT(CEXTEND_LOG_ERROR, "%d SIGINT or SIGTERM detected, "
-            "aborting.", ZAP_SRV_MAX_SIGINT);
+        CEXTEND_PRT(CEXTEND_LOG_ERROR, fetch_string(ZAP_SRV_SERVER_ABORT),
+            ZAP_SRV_MAX_SIGINT);
         abort();
     }
     keep_running(true);

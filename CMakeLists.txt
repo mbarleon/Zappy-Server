@@ -28,26 +28,14 @@ add_subdirectory(external/lib-cextend EXCLUDE_FROM_ALL)
 
 ########################################
 
-file(GLOB MAIN_SOURCE CONFIGURE_DEPENDS
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/main.c")
+file(GLOB_RECURSE MAIN_SOURCE CONFIGURE_DEPENDS
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.c")
 
 file(GLOB ENTRIES_SOURCE CONFIGURE_DEPENDS
     "${CMAKE_CURRENT_SOURCE_DIR}/entries/*.c")
 
 file(GLOB EXITS_SOURCE CONFIGURE_DEPENDS
     "${CMAKE_CURRENT_SOURCE_DIR}/exits/*.c")
-
-file(GLOB MAP_SOURCE CONFIGURE_DEPENDS
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/map/*.c")
-
-file(GLOB PARSE_ARGS_SOURCE CONFIGURE_DEPENDS
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/parse_args/*.c")
-
-file(GLOB SERVER_SOURCE CONFIGURE_DEPENDS
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/server/*.c")
-
-file(GLOB TEAMS_SOURCE CONFIGURE_DEPENDS
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/teams/*.c")
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang|AppleClang")
     set(MY_RPATH "@loader_path/libs")
@@ -62,10 +50,6 @@ add_executable(zappy-server
     ${MAIN_SOURCE}
     ${EXITS_SOURCE}
     ${ENTRIES_SOURCE}
-    ${MAP_SOURCE}
-    ${PARSE_ARGS_SOURCE}
-    ${SERVER_SOURCE}
-    ${TEAMS_SOURCE}
 )
 
 target_compile_options(zappy-server PRIVATE
@@ -103,6 +87,7 @@ target_compile_options(zappy-server PRIVATE
 
     # INFO: disabling this because this causes a compilation error
     -Wno-gnu-zero-variadic-macro-arguments
+    -Wno-format-security
 )
 
 target_link_libraries(zappy-server PRIVATE cextend)
@@ -134,10 +119,6 @@ add_executable(zap_srv_unit_tests
     ${MAIN_SOURCE}
     ${EXITS_SOURCE}
     ${ENTRIES_SOURCE}
-    ${MAP_SOURCE}
-    ${PARSE_ARGS_SOURCE}
-    ${SERVER_SOURCE}
-    ${TEAMS_SOURCE}
 )
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|AppleClang")

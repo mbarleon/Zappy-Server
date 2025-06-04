@@ -5,7 +5,7 @@
 ** density_table
 */
 
-#include "map_internal.h"
+#include "elements.h"
 
 /**
  * @brief Table defining the density values for each resource type on the map.
@@ -23,12 +23,12 @@
  * relative
  * probability or frequency of the resource's appearance.
  */
-const zap_srv_dentity_table_t density_table[] = {
-    {FOOD, 0.5F},
-    {LINEMATE, 0.3F},
-    {DERAUMERE, 0.15F},
-    {SIBUR, 0.1F},
-    {MENDIANE, 0.1F},
-    {PHIRAS, 0.08F},
-    {THYSTAME, 0.05F}
+const float density_table[] = {
+    0.5F,
+    0.3F,
+    0.15F,
+    0.1F,
+    0.1F,
+    0.08F,
+    0.05F
 };

@@ -62,8 +62,8 @@ static zap_srv_pos_t *generate_shuffled_positions(size_t x, size_t y)
  */
 static bool set_density(size_t i, size_t j, float *density)
 {
-    if (density_table[j].element == (zap_srv_elements_t)i) {
-        *density = density_table[j].density;
+    if (j == i) {
+        *density = density_table[j];
         return true;
     }
     return false;
@@ -88,7 +88,7 @@ static bool set_density(size_t i, size_t j, float *density)
  * @note The function frees the memory allocated for current_density.
  */
 static void compute_element_targets(size_t *element_targets,
-    zap_srv_dentity_table_t *current_density, size_t map_size)
+    float *current_density, size_t map_size)
 {
     float density;
     size_t target;
@@ -99,7 +99,7 @@ static void compute_element_targets(size_t *element_targets,
         for (size_t j = 0; j < ZAP_SRV_ELEMENTS_QUANTITY &&
             !set_density(i, j, &density); ++j);
         target = (size_t)(density * (float)map_size + 0.5F);
-        cur = (size_t)(current_density[i].density * (float)map_size + 0.5F);
+        cur = (size_t)(current_density[i] * (float)map_size + 0.5F);
         element_targets[i] = (target > cur) ? (target - cur) : 0;
     }
     free(current_density);
@@ -239,8 +239,8 @@ static void init_map(zap_srv_map_t *map)
 void generate_map(zap_srv_map_t *map)
 {
     size_t map_size;
+    float *current_density = NULL;
     zap_srv_pos_t *positions = NULL;
-    zap_srv_dentity_table_t *current_density = NULL;
     size_t element_targets[ZAP_SRV_ELEMENTS_QUANTITY] = {0};
 
     if (!map || map->x == 0 || map->y == 0)

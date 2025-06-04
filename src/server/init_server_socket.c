@@ -47,21 +47,21 @@ void init_server_socket(zap_srv_t *srv)
     srv->sock.fd = -1;
     srv->sock.ip = safe_calloc(INET_ADDRSTRLEN + 1, sizeof(char), NULL);
     if (create_socket(&srv->sock) == -1) {
-        CEXTEND_LOG(CEXTEND_LOG_ERROR, "socket failed.");
+        CEXTEND_LOG(CEXTEND_LOG_ERROR, fetch_string(ZAP_SRV_SOCKET_FAIL));
         THROW(CEXTEND_EXCEPTION_RUNTIME_ERROR);
     }
     if (init_sockaddr(&srv->sock, srv->port) == ZAP_SRV_ERROR) {
-        CEXTEND_LOG(CEXTEND_LOG_ERROR, "bind failed.");
+        CEXTEND_LOG(CEXTEND_LOG_ERROR, fetch_string(ZAP_SRV_BIND_FAIL));
         THROW(CEXTEND_EXCEPTION_RUNTIME_ERROR);
     }
     if (init_ip(&srv->sock) == ZAP_SRV_ERROR) {
-        CEXTEND_LOG(CEXTEND_LOG_ERROR, "getsockname failed.");
+        CEXTEND_LOG(CEXTEND_LOG_ERROR, fetch_string(ZAP_SRV_GETSOCKNAME_FAIL));
         THROW(CEXTEND_EXCEPTION_RUNTIME_ERROR);
     }
     if (listen(srv->sock.fd, ZAP_SRV_MAX_CLIENTS) != 0) {
-        CEXTEND_LOG(CEXTEND_LOG_ERROR, "listen failed.");
+        CEXTEND_LOG(CEXTEND_LOG_ERROR, fetch_string(ZAP_SRV_LISTEN_FAIL));
         THROW(CEXTEND_EXCEPTION_RUNTIME_ERROR);
     }
-    CEXTEND_LOG(CEXTEND_LOG_INFO, "Server listening on %s:%d.", srv->sock.ip,
-        srv->sock.port);
+    CEXTEND_LOG(CEXTEND_LOG_INFO, fetch_string(ZAP_SRV_SERVER_START),
+        srv->sock.ip, srv->sock.port);
 }

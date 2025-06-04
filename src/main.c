@@ -12,6 +12,7 @@
 #include <cextend/logger.h>
 #include <cextend/exception.h>
 #include "parse_args/parse_args.h"
+#include "string/string_entry_table.h"
 
 /**
  * @brief Prints the usage information for the zappy_server program.
@@ -23,8 +24,7 @@
  */
 static void print_helper(void)
 {
-    printf("USAGE: ./zappy_server -p port -x width -y height -n name1 name2 "
-        "... -c clientsNb -f freq\n");
+    printf(fetch_string(ZAP_SRV_USAGE));
 }
 
 /**
@@ -54,10 +54,10 @@ static int try_parse_args(int ac, const char **av,
         parse_args(ac, av, ctxt);
         generate_map(&ctxt->map);
     } CATCH(code, CEXTEND_EXCEPTION_BAD_ALLOC) {
-        CEXTEND_LOG(CEXTEND_LOG_ERROR, "Caught exception in parsing: %s",
+        CEXTEND_LOG(CEXTEND_LOG_ERROR, fetch_string(ZAP_SRV_PARSING_ERROR),
             get_exception_str(code));
     } CATCH(code, CEXTEND_EXCEPTION_INVALID_ARGUMENT) {
-        CEXTEND_LOG(CEXTEND_LOG_ERROR, "Caught exception in parsing: %s",
+        CEXTEND_LOG(CEXTEND_LOG_ERROR, fetch_string(ZAP_SRV_PARSING_ERROR),
             get_exception_str(code));
     } CATCH_END(code);
     END_TRY;
@@ -84,8 +84,8 @@ static int try_run_server(zap_srv_parsed_context_t *ctxt)
     TRY(code, except_ctxt) {
         run_server(ctxt);
     } CATCH_ALL {
-        CEXTEND_LOG(CEXTEND_LOG_ERROR, "Caught exception in server "
-            "running: %s", get_exception_str(code));
+        CEXTEND_LOG(CEXTEND_LOG_ERROR, fetch_string(ZAP_SRV_RUNTIME_ERROR),
+            get_exception_str(code));
     }
     END_TRY;
     return code ? ZAP_SRV_ERROR : ZAP_SRV_SUCCESS;

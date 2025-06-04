@@ -20,6 +20,7 @@
     #include <cextend/memory.h>
     #include "zap_srv_socket.h"
     #include <cextend/exception.h>
+    #include "../string/string_entry_table.h"
 
     #define ZAP_SRV_MAX_SIGINT 3
     #define ZAP_SRV_MAX_CLIENTS 100000

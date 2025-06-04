@@ -17,18 +17,18 @@
  *
  * @param table Pointer to an array of zap_srv_dentity_table_t to initialize.
  */
-static void create_null_table(zap_srv_dentity_table_t *table)
+static void create_null_table(float *table)
 {
     if (!table) {
         return;
     }
-    table[0] = (zap_srv_dentity_table_t){FOOD, 0.0F};
-    table[1] = (zap_srv_dentity_table_t){LINEMATE, 0.0F};
-    table[2] = (zap_srv_dentity_table_t){DERAUMERE, 0.0F};
-    table[3] = (zap_srv_dentity_table_t){SIBUR, 0.0F};
-    table[4] = (zap_srv_dentity_table_t){MENDIANE, 0.0F};
-    table[5] = (zap_srv_dentity_table_t){PHIRAS, 0.0F};
-    table[6] = (zap_srv_dentity_table_t){THYSTAME, 0.0F};
+    table[0] = 0.0F;
+    table[1] = 0.0F;
+    table[2] = 0.0F;
+    table[3] = 0.0F;
+    table[4] = 0.0F;
+    table[5] = 0.0F;
+    table[6] = 0.0F;
 }
 
 /**
@@ -43,10 +43,10 @@ static void create_null_table(zap_srv_dentity_table_t *table)
  * type will be incremented.
  */
 static void count_element_types(const zap_srv_elements_list_t *element,
-    zap_srv_dentity_table_t *table)
+    float *table)
 {
     for (const zap_srv_elements_list_t *tmp = element; tmp; tmp = tmp->next) {
-        table[tmp->element].density++;
+        table[tmp->element] += 1.0F;
     }
 }
 
@@ -63,11 +63,10 @@ static void count_element_types(const zap_srv_elements_list_t *element,
  * containing the density of each element type, or NULL on allocation failure
  * or if the map size is zero.
  */
-zap_srv_dentity_table_t *compute_density(const zap_srv_map_t *map)
+float *compute_density(const zap_srv_map_t *map)
 {
     const size_t map_size = map->x * map->y;
-    zap_srv_dentity_table_t *table = (zap_srv_dentity_table_t *)
-        malloc(sizeof(zap_srv_dentity_table_t) * ZAP_SRV_ELEMENTS_QUANTITY);
+    float *table = (float *)malloc(sizeof(float) * ZAP_SRV_ELEMENTS_QUANTITY);
 
     if (!table || map_size == 0) {
         return NULL;
@@ -82,7 +81,7 @@ zap_srv_dentity_table_t *compute_density(const zap_srv_map_t *map)
         }
     }
     for (size_t i = 0; i < ZAP_SRV_ELEMENTS_QUANTITY; ++i) {
-        table[i].density /= (float)map_size;
+        table[i] /= (float)map_size;
     }
     return table;
 }
