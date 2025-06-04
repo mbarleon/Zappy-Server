@@ -131,7 +131,7 @@ endif()
 
 target_compile_definitions(zap_srv_unit_tests PRIVATE UNIT_TESTS=1)
 
-target_link_libraries(zap_srv_unit_tests PRIVATE criterion sfml-graphics sfml-system sfml-window, cextend)
+target_link_libraries(zap_srv_unit_tests PRIVATE criterion, cextend)
 
 target_include_directories(zap_srv_unit_tests PRIVATE
     $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
