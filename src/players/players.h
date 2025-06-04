@@ -30,6 +30,14 @@ typedef struct {
      */
     char *team;
     /**
+     * @brief Buffer for the commands
+     */
+    char *buf;
+    /**
+     * @brief Length of the buffer.
+     */
+    size_t buf_size;
+    /**
      * @brief The current position of the player on the map.
      */
     zap_srv_pos_t pos;

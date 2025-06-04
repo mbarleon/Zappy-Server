@@ -19,14 +19,19 @@
  * @param sock Pointer to the zap_srv_socket_t structure representing the
  * socket to close.
  */
-void close_sock(zap_srv_socket_t *sock)
+void close_sock(zap_srv_socket_t *sock, bool is_server)
 {
-    if (sock->fd != -1) {
-        close(sock->fd);
-        sock->fd = -1;
-    }
     if (sock->ip) {
         safe_free((void **)&sock->ip);
         sock->ip = NULL;
     }
+    if (sock->fd <= STDERR_FILENO) {
+        return;
+    }
+    if (!is_server) {
+        CEXTEND_LOG(CEXTEND_LOG_INFO, fetch_string(ZAP_SRV_DISCONNECT_CLIENT),
+            sock->fd);
+    }
+    close(sock->fd);
+    sock->fd = -1;
 }

@@ -41,8 +41,9 @@ static const char *string_table[] = {
         "clientsNb -f freq\n"),
     "Caught exception in %s: %s.",
     "Max clients reached.",
-    "Client %d connected: %s:%d",
+    "Client with fd %d connected: %s:%d",
     "Client with fd %d exited unexpectedly.",
+    "Disconnecting client with fd %d.",
 
     "Missing string in string entry table."
 };

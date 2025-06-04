@@ -26,17 +26,19 @@
 
     #define ZAP_SRV_MAX_SIGINT 3
     #define ZAP_SRV_TIMEOUT 10000
+    #define ZAP_SRV_COMMAND_LENGTH 2048
 
 bool keep_running(bool running);
 void handle_signals(UNUSED int sig, UNUSED siginfo_t *info,
     UNUSED void *ucontext);
 
-void close_sock(zap_srv_socket_t *sock);
 void init_server_socket(zap_srv_t *srv);
+void close_sock(zap_srv_socket_t *sock, bool is_server);
 
-void accept_new_clients(UNUSED zap_srv_parsed_context_t *ctxt);
+void accept_new_clients(zap_srv_parsed_context_t *ctxt);
 void read_message_from_clients(zap_srv_parsed_context_t *ctxt);
 
+ssize_t recv_client(char **line, zap_srv_socket_t *client, size_t *buf_size);
 void send_client(const char *buffer, zap_srv_socket_t *client);
 
 void disconnect_client(zap_srv_t *server, size_t i);

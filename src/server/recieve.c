@@ -7,9 +7,13 @@
 
 #include "server_internal.h"
 
-static void do_action(UNUSED zap_srv_parsed_context_t *ctxt, UNUSED size_t i)
+static void do_action(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client,
+    size_t i)
 {
-    return;
+    if (recv_client(&client->buf, &client->sock, &client->buf_size) == -1) {
+        disconnect_client(&ctxt->server, i);
+        return;
+    }
 }
 
 void read_message_from_clients(zap_srv_parsed_context_t *ctxt)
@@ -18,12 +22,15 @@ void read_message_from_clients(zap_srv_parsed_context_t *ctxt)
         while (ctxt->server.clients[i].sock.fd == ZAP_SRV_SOCK_ERROR) {
             disconnect_client(&ctxt->server, i);
         }
+        if (i >= ctxt->server.num_clients) {
+            break;
+        }
         if (ctxt->server.fds[i + 1].revents & (POLLHUP | POLLERR)) {
             handle_client_disconnect(&ctxt->server.clients[i].sock);
             disconnect_client(&ctxt->server, i);
             continue;
         }
         if (ctxt->server.fds[i + 1].revents & POLLIN)
-            do_action(ctxt, i);
+            do_action(ctxt, &ctxt->server.clients[i], i);
     }
 }

@@ -47,6 +47,7 @@ typedef enum {
     ZAP_SRV_MAX_CLIENT_ERR,
     ZAP_SRV_CLIENT_CONNECT,
     ZAP_SRV_CLIENT_ERR,
+    ZAP_SRV_DISCONNECT_CLIENT,
 
     ZAP_SRV_STRING_MAX
 } zap_srv_string_entries_t;

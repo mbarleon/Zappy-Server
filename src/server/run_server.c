@@ -18,6 +18,7 @@ static void init_server(zap_srv_t *server)
         server->fds[i].fd = -1;
         server->fds[i].events = POLLIN;
         server->port_list[i - 1] = -1;
+        server->clients[i - 1].sock.fd = -1;
     }
     server->num_clients = 0;
 }
@@ -56,5 +57,5 @@ void run_server(zap_srv_parsed_context_t *ctxt)
             read_message_from_clients(ctxt);
         }
     }
-    close_sock(&ctxt->server.sock);
+    close_sock(&ctxt->server.sock, true);
 }

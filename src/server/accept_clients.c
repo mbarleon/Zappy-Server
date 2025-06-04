@@ -30,23 +30,23 @@ static void init_client(zap_srv_socket_t *client_sock)
     memset(&(client_sock->addr), 0, client_sock->addr_len);
 }
 
-void accept_new_clients(UNUSED zap_srv_parsed_context_t *ctxt)
+void accept_new_clients(zap_srv_parsed_context_t *ctxt)
 {
-    zap_srv_player_t client = ctxt->server.clients[ctxt->server.num_clients];
+    zap_srv_player_t *client = &ctxt->server.clients[ctxt->server.num_clients];
 
     if (ctxt->server.num_clients >= ZAP_SRV_MAX_CLIENTS) {
         CEXTEND_LOG(CEXTEND_LOG_WARNING, fetch_string(ZAP_SRV_MAX_CLIENT_ERR));
         return;
     }
-    init_client(&client.sock);
-    if (accept_client(ctxt->server.sock.fd, &client.sock) == ZAP_SRV_ERROR) {
-        safe_free((void **)&client.sock.ip);
+    init_client(&client->sock);
+    if (accept_client(ctxt->server.sock.fd, &client->sock) == ZAP_SRV_ERROR) {
+        safe_free((void **)&client->sock.ip);
         return;
     }
     CEXTEND_LOG(CEXTEND_LOG_INFO, fetch_string(ZAP_SRV_CLIENT_CONNECT),
-        ctxt->server.num_clients, client.sock.ip, client.sock.port);
+        client->sock.fd, client->sock.ip, client->sock.port);
     ctxt->server.num_clients += 1;
-    ctxt->server.fds[ctxt->server.num_clients].fd = client.sock.fd;
+    ctxt->server.fds[ctxt->server.num_clients].fd = client->sock.fd;
     ctxt->server.fds[ctxt->server.num_clients].events = POLLIN;
-    send_client(fetch_msg(ZAP_SRV_WELCOME), &client.sock);
+    send_client(fetch_msg(ZAP_SRV_WELCOME), &client->sock);
 }
