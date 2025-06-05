@@ -7,6 +7,15 @@
 
 #include "server_internal.h"
 
+/**
+ * @brief Handles the disconnection process for a client socket.
+ *
+ * Logs a warning message indicating a client error, closes the socket if it
+ * is valid, and marks the client's file descriptor as an error state.
+ *
+ * @param client Pointer to the zap_srv_socket_t structure representing the
+ * client to disconnect.
+ */
 void handle_client_disconnect(zap_srv_socket_t *client)
 {
     CEXTEND_LOG(CEXTEND_LOG_WARNING, fetch_string(ZAP_SRV_CLIENT_ERR),
@@ -17,6 +26,23 @@ void handle_client_disconnect(zap_srv_socket_t *client)
     client->fd = ZAP_SRV_SOCK_ERROR;
 }
 
+/**
+ * @brief Disconnects a client from the server and cleans up associated
+ * resources.
+ *
+ * This function safely disconnects the client at the specified index `i` from
+ * the server.
+ * It performs the following actions:
+ * - Frees the memory allocated for the client's team name.
+ * - Closes the client's socket.
+ * - Shifts the remaining clients, port list, and file descriptors to fill the
+ *   gap.
+ * - Resets the last client slot and associated resources.
+ * - Decrements the total number of connected clients.
+ *
+ * @param server Pointer to the server structure containing client information.
+ * @param i Index of the client to disconnect in the server's client array.
+ */
 void disconnect_client(zap_srv_t *server, size_t i)
 {
     char *team = server->clients[i].team;

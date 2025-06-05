@@ -7,6 +7,15 @@
 
 #include "server_internal.h"
 
+/**
+ * @brief Initializes the server structure and prepares it to accept clients.
+ *
+ * This function sets up the server socket, allocates memory for the client
+ * structures, and initializes the file descriptor and port lists. It also
+ * resets the number of connected clients to zero.
+ *
+ * @param server Pointer to the zap_srv_t server structure to initialize.
+ */
 static void init_server(zap_srv_t *server)
 {
     init_server_socket(server);
@@ -23,6 +32,17 @@ static void init_server(zap_srv_t *server)
     server->num_clients = 0;
 }
 
+/**
+ * @brief Attempts to accept new client connections for the server.
+ *
+ * This function wraps the call to accept_new_clients() in an exception
+ * handling block to catch memory allocation failures
+ * (CEXTEND_EXCEPTION_BAD_ALLOC). If such an exception occurs, the function
+ * returns early to prevent further  processing. Otherwise, it proceeds to
+ * accept new clients as normal.
+ *
+ * @param ctxt Pointer to the parsed server context structure.
+ */
 static void try_accept_clients(zap_srv_parsed_context_t *ctxt)
 {
     cextend_exception_code_t code = 0;
@@ -37,6 +57,20 @@ static void try_accept_clients(zap_srv_parsed_context_t *ctxt)
     END_TRY;
 }
 
+/**
+ * @brief Runs the main server loop, handling client connections and messages.
+ *
+ * This function initializes the server, then enters a loop that continues
+ * as long as the server is instructed to keep running. Within the loop,
+ * it uses poll() to monitor file descriptors for incoming connections or
+ * messages. If a new client attempts to connect, it accepts the connection.
+ * It also reads messages from connected clients. The loop can be interrupted
+ * by external signals or poll failures, in which case the server socket is
+ * properly closed before exiting.
+ *
+ * @param ctxt Pointer to the parsed server context structure containing
+ *        server state and configuration.
+ */
 void run_server(zap_srv_parsed_context_t *ctxt)
 {
     int poll_count = -1;

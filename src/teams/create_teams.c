@@ -7,6 +7,16 @@
 
 #include "teams_internal.h"
 
+/**
+ * @brief Checks if a string contains only valid characters.
+ *
+ * This function iterates through the given string and verifies that each
+ * character is either an alphanumeric character, a hyphen ('-'), or an
+ * underscore ('_').
+ *
+ * @param str The input string to validate.
+ * @return true if all characters in the string are valid; false otherwise.
+ */
 static bool is_valid_characters(const char *str)
 {
     for (size_t i = 0; str[i]; ++i) {
