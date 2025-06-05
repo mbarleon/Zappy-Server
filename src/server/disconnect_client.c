@@ -18,11 +18,12 @@
  */
 void handle_client_disconnect(zap_srv_socket_t *client)
 {
+    if (client->fd <= STDERR_FILENO) {
+        return;
+    }
     CEXTEND_LOG(CEXTEND_LOG_WARNING, fetch_string(ZAP_SRV_CLIENT_ERR),
         client->fd);
-    if (client->fd > STDERR_FILENO) {
-        close_sock(client, false);
-    }
+    close_sock(client, false);
     client->fd = ZAP_SRV_SOCK_ERROR;
 }
 

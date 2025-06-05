@@ -47,7 +47,6 @@ void read_message_from_clients(zap_srv_parsed_context_t *ctxt);
 
 ssize_t recv_client(char **line, zap_srv_socket_t *client, size_t *buf_size);
 
-void disconnect_client(zap_srv_t *server, size_t i);
 void handle_client_disconnect(zap_srv_socket_t *client);
 
 void connect_client(zap_srv_player_t *client, zap_srv_parsed_context_t *ctxt);

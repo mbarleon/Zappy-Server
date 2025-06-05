@@ -181,6 +181,7 @@ static void send_player_connect_message(zap_srv_player_t *client,
         free(block);
     }
     client->id = get_index();
+    client->birth_time = get_time();
 }
 
 /**

@@ -110,10 +110,68 @@ static void consume_actions(zap_srv_parsed_context_t *ctxt,
         }
         real_time = ((double)action_time[client->actions[i].action] /
             (double)ctxt->server.frequency);
-            action_timepoint = (double)client->actions[i].timestamp;
+        action_timepoint = (double)client->actions[i].timestamp;
         if (current_time >= action_timepoint + real_time) {
             do_action(ctxt, client, i);
             remove_action(client, i);
+            i--;
+        }
+    }
+}
+
+/**
+ * @brief Decreases the number of clients for a given team.
+ *
+ * This function searches for the team with the specified name in the context's
+ * team list and decrements its client count by one.
+ *
+ * @param ctxt Pointer to the parsed server context containing the team list.
+ * @param team Name of the team whose client count should be decreased.
+ */
+static void decrease_team_count(zap_srv_parsed_context_t *ctxt,
+    const char *team)
+{
+    for (zap_srv_team_t *tmp = ctxt->teams; tmp; tmp = tmp->next) {
+        if (strcmp(tmp->name, team) == 0) {
+            tmp->num_clients -= 1;
+            return;
+        }
+    }
+}
+
+/**
+ * @brief Checks if a player is still alive based on their time units and the
+ * server frequency.
+ *
+ * This function determines whether the specified player (`client`) has
+ * exceeded their allowed lifetime by comparing the current time with the
+ * calculated real time of death. If the player is dead, it sends a "dead"
+ * message to the client, decreases the team's player count, and disconnects
+ * the client from the server.
+ *
+ * @param ctxt Pointer to the parsed server context containing server and
+ * client information.
+ * @param client Pointer to the player structure to check for alive status.
+ */
+static void check_alive(zap_srv_parsed_context_t *ctxt,
+    zap_srv_player_t *client)
+{
+    size_t client_nbr = 0;
+    double current_time = get_time();
+    double real_time = client->birth_time +
+        (client->time_units / (double)ctxt->server.frequency);
+
+    if (client->dead) {
+        return;
+    }
+    client->dead = current_time >= real_time;
+    if (client->dead) {
+        send_client("dead\n", &client->sock);
+        decrease_team_count(ctxt, client->team);
+        for (; client_nbr < ZAP_SRV_MAX_CLIENTS &&
+            ctxt->server.clients[client_nbr].id != client->id; ++client_nbr);
+        if (client_nbr < ZAP_SRV_MAX_CLIENTS) {
+            disconnect_client(&ctxt->server, client_nbr);
         }
     }
 }
@@ -132,6 +190,10 @@ static void consume_actions(zap_srv_parsed_context_t *ctxt,
  */
 void player_actions(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client)
 {
+    check_alive(ctxt, client);
+    if (client->dead) {
+        return;
+    }
     consume_actions(ctxt, client);
     parse_buf(client);
 }

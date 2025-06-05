@@ -35,10 +35,15 @@ static void do_action(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client,
     }
     if (read && client->team == NULL) {
         connect_client(client, ctxt);
-    } else if (read && strcmp(client->team, "GRAPHIC") == 0) {
+        return;
+    }
+    if (read && strcmp(client->team, "GRAPHIC") == 0) {
         graphic_actions(client);
-    } else {
+        return;
+    }
+    if (client->team != NULL) {
         player_actions(ctxt, client);
+        return;
     }
 }
 
