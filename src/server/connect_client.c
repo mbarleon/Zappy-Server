@@ -206,6 +206,7 @@ void connect_client(zap_srv_player_t *client, zap_srv_parsed_context_t *ctxt)
 
     client->team = safe_calloc(team_len + 1, sizeof(char), NULL);
     memcpy(client->team, client->buf, team_len);
+    memset(client->buf, 0, client->buf_size);
     if (!team_exists(client->team, ctxt)) {
         connect_client_err(client, ZAP_SRV_JOIN_TEAM_ERR);
     }

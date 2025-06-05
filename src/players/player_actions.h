@@ -8,6 +8,7 @@
 #ifndef ZAP_SRV_PLAYER_ACTIONS_H_
     #define ZAP_SRV_PLAYER_ACTIONS_H_
     #include <stddef.h>
+    #include "time.h"
 
 /**
  * @enum zap_srv_player_actions_t
@@ -48,5 +49,6 @@ typedef enum {
 } zap_srv_player_actions_t;
 
 extern const size_t action_time[];
+double get_time(void);
 
 #endif /* !ZAP_SRV_PLAYER_ACTIONS_H_ */

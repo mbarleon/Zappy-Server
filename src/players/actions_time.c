@@ -29,3 +29,11 @@ const size_t action_time[] = {
     7,
     300
 };
+
+double get_time(void)
+{
+    struct timespec ts;
+
+    clock_gettime(CLOCK_REALTIME, &ts);
+    return (double)ts.tv_sec + (double)ts.tv_nsec / 1e9;
+}

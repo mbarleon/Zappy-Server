@@ -30,7 +30,7 @@
     #include "../string/message_entry_table.h"
 
     #define ZAP_SRV_MAX_SIGINT 3
-    #define ZAP_SRV_TIMEOUT 10000
+    #define ZAP_SRV_TIMEOUT 100
     #define ZAP_SRV_COMMAND_LENGTH 2048
     #define ZAP_SRV_MAX_LINE_SIZE 2097152
 

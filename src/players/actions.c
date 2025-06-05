@@ -61,7 +61,6 @@ static void do_action(zap_srv_parsed_context_t *ctxt,
 }
 
 /**
- * TODO: check that the action is properly removed
  * @brief Removes an action from the player's action queue at the specified
  * index.
  *
@@ -101,16 +100,18 @@ static void remove_action(zap_srv_player_t *client, size_t i)
 static void consume_actions(zap_srv_parsed_context_t *ctxt,
     zap_srv_player_t *client)
 {
-    time_t real_time;
-    time_t current_time = time(NULL);
+    double real_time;
+    double action_timepoint;
+    double current_time = get_time();
 
     for (size_t i = 0; i < ZAP_SRV_MAX_ACTIONS; ++i) {
         if (client->actions[i].action == ZAP_SRV_PL_NONE) {
             continue;
         }
-        real_time = (time_t)((double)action_time[client->actions[i].action] /
+        real_time = ((double)action_time[client->actions[i].action] /
             (double)ctxt->server.frequency);
-        if (current_time >= client->actions[i].timestamp + real_time) {
+            action_timepoint = (double)client->actions[i].timestamp;
+        if (current_time >= action_timepoint + real_time) {
             do_action(ctxt, client, i);
             remove_action(client, i);
         }

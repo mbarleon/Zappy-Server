@@ -34,7 +34,7 @@ typedef struct {
     /**
      * @brief Time at which the action was performed.
      */
-    time_t timestamp;
+    double timestamp;
     /**
      * @brief The type of action performed by the player
      * (zap_srv_player_actions_t).

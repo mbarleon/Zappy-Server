@@ -29,7 +29,7 @@ static bool command_takes_argument(size_t idx)
 }
 
 static void add_action(zap_srv_player_t *player, const char *arg,
-    time_t current_time, zap_srv_player_actions_t action)
+    double current_time, zap_srv_player_actions_t action)
 {
     for (size_t i = 0; i < ZAP_SRV_MAX_ACTIONS - 1; ++i) {
         if (player->actions[i].action != ZAP_SRV_PL_NONE) {
@@ -97,7 +97,7 @@ static void handle_invalid_command(zap_srv_player_t *player)
 }
 
 static void identify_action(zap_srv_player_t *player, const char *line,
-    time_t current_time)
+    double current_time)
 {
     zap_srv_player_actions_t action = ZAP_SRV_PL_NONE;
     const char *arg = NULL;
@@ -111,10 +111,10 @@ static void identify_action(zap_srv_player_t *player, const char *line,
 
 void parse_buf(zap_srv_player_t *player)
 {
-    time_t current_time = time(NULL);
-    char *saveptr = NULL;
-    char *line = NULL;
     char *buf;
+    char *line = NULL;
+    char *saveptr = NULL;
+    double current_time = get_time();
 
     if (!player->buf) {
         return;
@@ -128,4 +128,5 @@ void parse_buf(zap_srv_player_t *player)
         line = strtok_r(NULL, "\n", &saveptr);
     }
     free(buf);
+    memset(player->buf, 0, player->buf_size);
 }
