@@ -30,6 +30,15 @@ const size_t action_time[] = {
     300
 };
 
+/**
+ * @brief Retrieves the current time in seconds with nanosecond precision.
+ *
+ * This function uses clock_gettime with CLOCK_REALTIME to obtain the current
+ * time. The result is returned as a double, representing the number of seconds
+ * (including fractional seconds) since the Unix epoch (January 1, 1970).
+ *
+ * @return Current time in seconds as a double.
+ */
 double get_time(void)
 {
     struct timespec ts;
