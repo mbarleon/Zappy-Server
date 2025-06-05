@@ -7,6 +7,7 @@
 
 #ifndef ZAP_SRV_TYPES_H_
     #define ZAP_SRV_TYPES_H_
+    #include <stddef.h>
 
 /**
  * @brief Represents a position on the map with x and y coordinates.

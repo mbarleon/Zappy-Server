@@ -10,6 +10,7 @@
     #include <time.h>
     #include "types.h"
     #include <stddef.h>
+    #include <sys/types.h>
     #include "player_actions.h"
     #include "../elements/elements.h"
     #include "../server/zap_srv_socket.h"
@@ -25,6 +26,7 @@
  * and buffered actions.
  */
 typedef struct {
+    ssize_t id;
     /**
      * @brief The name of the team the player belongs to.
      */

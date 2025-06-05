@@ -44,9 +44,7 @@ void create_team(zap_srv_team_t **teams, const char *str, size_t max_clients)
     if (!teams || strcmp(str, "GRAPHIC") == 0 || !is_valid_characters(str)) {
         THROW(CEXTEND_EXCEPTION_INVALID_ARGUMENT);
     }
-    new_team = safe_malloc(sizeof(zap_srv_team_t), NULL);
-    new_team->next = NULL;
-    new_team->num_clients = 0;
+    new_team = safe_calloc(1, sizeof(zap_srv_team_t), NULL);
     new_team->name = safe_strdup(str);
     new_team->max_clients = max_clients;
     if (!*teams) {

@@ -7,6 +7,14 @@
 
 #include "server_internal.h"
 
+static ssize_t get_index(void)
+{
+    static ssize_t id = 0;
+
+    id += 1;
+    return id - 1;
+}
+
 static size_t count_team_len(const zap_srv_player_t *client)
 {
     size_t i = 0;
@@ -35,7 +43,7 @@ static size_t compute_slots_in_team(char *team, zap_srv_parsed_context_t *ctxt)
     }
     for (zap_srv_team_t *tmp = ctxt->teams; tmp; tmp = tmp->next) {
         if (strcmp(team, tmp->name) == 0) {
-            return tmp->max_clients - tmp->num_clients;
+            return tmp->available_slots;
         }
     }
     return 0;
@@ -49,6 +57,8 @@ static void decrease_team_slots(char *team, zap_srv_parsed_context_t *ctxt)
     for (zap_srv_team_t *tmp = ctxt->teams; tmp; tmp = tmp->next) {
         if (strcmp(team, tmp->name) == 0) {
             tmp->num_clients += 1;
+            tmp->available_slots -= 1;
+            hatch_egg(ctxt, team);
             return;
         }
     }
@@ -74,6 +84,7 @@ static void send_player_connect_message(zap_srv_player_t *client,
         send_client(block, &client->sock);
         free(block);
     }
+    client->id = get_index();
 }
 
 void connect_client(zap_srv_player_t *client, zap_srv_parsed_context_t *ctxt)

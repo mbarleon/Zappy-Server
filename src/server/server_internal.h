@@ -15,12 +15,14 @@
     #include <stdlib.h>
     #include <signal.h>
     #include <stdbool.h>
+    #include <sys/types.h>
     #include <arpa/inet.h>
     #include <cextend/macro.h>
     #include <cextend/logger.h>
     #include <cextend/memory.h>
     #include "zap_srv_socket.h"
     #include <cextend/exception.h>
+    #include "../egg/egg_functions.h"
     #include <cextend/snprintf_alloc.h>
     #include "../graphical/graphical.h"
     #include "../string/string_entry_table.h"

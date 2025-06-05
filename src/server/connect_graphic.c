@@ -7,6 +7,27 @@
 
 #include "server_internal.h"
 
+static void send_enw_line(zap_srv_egg_t *tmp2, zap_srv_player_t *client)
+{
+    char *block;
+
+    block = snprintf_alloc("enw #%ld #%ld %ld %ld\n", tmp2->number,
+        tmp2->player_number, tmp2->pos.x, tmp2->pos.y);
+    if (block) {
+        send_client(block, &client->sock);
+        free(block);
+    }
+}
+
+static void send_enw(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client)
+{
+    for (zap_srv_team_t *tmp = ctxt->teams; tmp; tmp = tmp->next) {
+        for (zap_srv_egg_t *tmp2 = tmp->eggs; tmp2; tmp2 = tmp2->next) {
+            send_enw_line(tmp2, client);
+        }
+    }
+}
+
 static void send_tna(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client)
 {
     char *block;
@@ -57,4 +78,5 @@ void send_graphic_connect_message(zap_srv_player_t *client,
         }
     }
     send_tna(ctxt, client);
+    send_enw(ctxt, client);
 }

@@ -10,6 +10,7 @@
 #include <string.h>
 #include "server/server.h"
 #include <cextend/logger.h>
+#include "egg/egg_functions.h"
 #include <cextend/exception.h>
 #include "parse_args/parse_args.h"
 #include "string/string_entry_table.h"
@@ -53,6 +54,7 @@ static int try_parse_args(int ac, const char **av,
     TRY(code, except_ctxt) {
         parse_args(ac, av, ctxt);
         generate_map(&ctxt->map);
+        spawn_eggs(ctxt);
     } CATCH(code, CEXTEND_EXCEPTION_BAD_ALLOC) {
         CEXTEND_LOG(CEXTEND_LOG_ERROR, fetch_string(ZAP_SRV_CAUGHT_ERROR),
             "parsing", get_exception_str(code));
