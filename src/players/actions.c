@@ -5,6 +5,7 @@
 ** actions
 */
 
+#include "actions/actions.h"
 #include "player_functions.h"
 
 /**
@@ -20,17 +21,18 @@
  */
 static void (* const action_ptrs[])(zap_srv_parsed_context_t *,
     zap_srv_player_t *) = {
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
+    &player_forward,
+    &player_right,
+    &player_left,
+    &player_look,
+    &player_inventory,
+    &player_broadcast,
+    &player_connect_nbr,
+    &player_fork,
+    &player_eject,
+    &player_take,
+    &player_set,
+    &player_incantation
 };
 
 /**
@@ -51,10 +53,6 @@ static void do_action(zap_srv_parsed_context_t *ctxt,
 {
     if (client->actions[i].action == ZAP_SRV_PL_NONE) {
         send_client("ko\n", &client->sock);
-        return;
-    }
-    if (action_ptrs[client->actions[i].action] == NULL) {
-        send_client("not implemented (ko)\n", &client->sock);
         return;
     }
     action_ptrs[client->actions[i].action](ctxt, client);
