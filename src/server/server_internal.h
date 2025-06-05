@@ -20,6 +20,7 @@
     #include <cextend/macro.h>
     #include <cextend/logger.h>
     #include <cextend/memory.h>
+    #include "../utils/utils.h"
     #include "zap_srv_socket.h"
     #include <cextend/exception.h>
     #include "../egg/egg_functions.h"

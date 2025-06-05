@@ -142,20 +142,6 @@ static int initial_error_handling(char **line, size_t buffer_size,
 }
 
 /**
- * @brief Checks if a character is valid for input processing.
- *
- * A character is considered valid if it is a newline ('\n'), a tab ('\t'),
- * or any printable ASCII character (from space ' ' (32) to tilde '~' (126)).
- *
- * @param c The character to validate.
- * @return Non-zero if the character is valid, 0 otherwise.
- */
-static int is_valid_char(char c)
-{
-    return c == '\n' || c == '\t' || (c >= 32 && c <= 126);
-}
-
-/**
  * @brief Reads a line from the specified client socket into a dynamically
  * allocated buffer.
  *

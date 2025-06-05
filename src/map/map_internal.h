@@ -11,6 +11,7 @@
     #include "types.h"
     #include <stdlib.h>
     #include <stdbool.h>
+    #include "../utils/utils.h"
     #include <cextend/memory.h>
 
 float *compute_density(const zap_srv_map_t *map);
