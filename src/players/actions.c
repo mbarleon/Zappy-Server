@@ -152,9 +152,8 @@ static void decrease_team_count(zap_srv_parsed_context_t *ctxt,
  * @param client Pointer to the player structure to check for alive status.
  */
 static void check_alive(zap_srv_parsed_context_t *ctxt,
-    zap_srv_player_t *client)
+    zap_srv_player_t *client, size_t i)
 {
-    size_t client_nbr = 0;
     double current_time = get_time();
     double real_time = client->birth_time +
         (client->time_units / (double)ctxt->server.frequency);
@@ -165,12 +164,9 @@ static void check_alive(zap_srv_parsed_context_t *ctxt,
     client->dead = current_time >= real_time;
     if (client->dead) {
         send_client("dead\n", &client->sock);
+        send_pdi(ctxt, client);
         decrease_team_count(ctxt, client->team);
-        for (; client_nbr < ZAP_SRV_MAX_CLIENTS &&
-            ctxt->server.clients[client_nbr].id != client->id; ++client_nbr);
-        if (client_nbr < ZAP_SRV_MAX_CLIENTS) {
-            disconnect_client(&ctxt->server, client_nbr);
-        }
+        disconnect_client(&ctxt->server, i);
     }
 }
 
@@ -186,9 +182,10 @@ static void check_alive(zap_srv_parsed_context_t *ctxt,
  * @param client Pointer to the player structure whose actions are to be
  * handled.
  */
-void player_actions(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client)
+void player_actions(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client,
+    size_t i)
 {
-    check_alive(ctxt, client);
+    check_alive(ctxt, client, i);
     if (client->dead) {
         return;
     }

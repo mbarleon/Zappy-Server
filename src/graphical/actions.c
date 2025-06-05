@@ -5,7 +5,7 @@
 ** actions
 */
 
-#include "graphical.h"
+#include "graphical_internal.h"
 
 void graphic_actions(zap_srv_player_t *client)
 {

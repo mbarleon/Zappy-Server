@@ -68,7 +68,9 @@ static void init_client_actions(zap_srv_player_t *client)
         client->actions[i].action = ZAP_SRV_PL_NONE;
         client->actions[i].arguments = NULL;
     }
+    client->level = 1;
     client->dead = false;
+    client->orientation = NORTH;
     client->time_units = ZAP_SRV_BASE_TIME_UNITS;
 }
 

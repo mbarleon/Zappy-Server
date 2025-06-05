@@ -13,9 +13,11 @@
     #include <stdbool.h>
     #include <cextend/memory.h>
     #include "../server/server.h"
+    #include "../graphical/graphical.h"
     #include "../parse_args/parse_args.h"
 
 void parse_buf(zap_srv_player_t *player);
-void player_actions(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client);
+void player_actions(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client,
+    size_t i);
 
 #endif /* !ZAP_SRV_PLAYER_FUNCTIONS_H_ */

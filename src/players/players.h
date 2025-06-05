@@ -44,6 +44,13 @@ typedef struct {
     zap_srv_player_actions_t action;
 } zap_srv_actions_t;
 
+typedef enum {
+    NORTH = 1,
+    EAST,
+    SOUTH,
+    WEST
+} zap_srv_player_orientation_t;
+
 /**
  * @struct player_t
  * @brief Represents a player in the Zappy server.
@@ -70,6 +77,10 @@ typedef struct {
      */
     ssize_t id;
     /**
+     * @brief Level of the player.
+     */
+    ssize_t level;
+    /**
      * @brief The name of the team the player belongs to.
      */
     char *team;
@@ -85,6 +96,10 @@ typedef struct {
      * @brief The current position of the player on the map.
      */
     zap_srv_pos_t pos;
+    /**
+     * @brief The current orientation of the player.
+     */
+    zap_srv_player_orientation_t orientation;
     /**
      * @brief The socket associated with the player for network communication.
      */

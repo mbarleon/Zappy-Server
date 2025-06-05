@@ -8,6 +8,37 @@
 #include "server_internal.h"
 
 /**
+ * @brief Executes the appropriate action for a connected client based on their
+ * team.
+ *
+ * This function checks the client's team and determines which set of actions
+ * to perform:
+ * - If the client's team is "GRAPHIC" and the 'read' condition is true, it
+ *   calls graphic_actions().
+ * - If the client's team is not NULL and not "GRAPHIC", it calls
+ *   player_actions().
+ *
+ * @param ctxt Pointer to the parsed server context.
+ * @param client Pointer to the client/player structure.
+ * @param i Index or identifier for the client.
+ */
+static void do_connected_action(zap_srv_parsed_context_t *ctxt,
+    zap_srv_player_t *client, size_t i, bool read)
+{
+    int cmp;
+
+    cmp = strcmp(client->team, "GRAPHIC");
+    if (read && cmp == 0) {
+        graphic_actions(client);
+        return;
+    }
+    if (client->team != NULL && cmp != 0) {
+        player_actions(ctxt, client, i);
+        return;
+    }
+}
+
+/**
  * @brief Handles actions for a specific client in the server context.
  *
  * This function processes incoming data from a client, manages their
@@ -37,14 +68,10 @@ static void do_action(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client,
         connect_client(client, ctxt);
         return;
     }
-    if (read && strcmp(client->team, "GRAPHIC") == 0) {
-        graphic_actions(client);
+    if (client->team == NULL) {
         return;
     }
-    if (client->team != NULL) {
-        player_actions(ctxt, client);
-        return;
-    }
+    do_connected_action(ctxt, client, i, read);
 }
 
 /**
