@@ -44,6 +44,9 @@ static const char *string_table[] = {
     "Client with fd %d connected: %s:%d",
     "Client with fd %d exited unexpectedly.",
     "Disconnecting client with fd %d.",
+    "Client %d joined team %s.",
+    "Client %d tried to join invalid team %s.",
+    "Client %d tried to join full team %s.",
 
     "Missing string in string entry table."
 };

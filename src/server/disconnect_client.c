@@ -19,8 +19,11 @@ void handle_client_disconnect(zap_srv_socket_t *client)
 
 void disconnect_client(zap_srv_t *server, size_t i)
 {
+    char *team = server->clients[i].team;
+
     if (server->num_clients <= 0)
         return;
+    safe_free((void **)&team);
     close_sock(&server->clients[i].sock, false);
     for (; i < server->num_clients - 1; ++i) {
         server->port_list[i] = server->port_list[i + 1];

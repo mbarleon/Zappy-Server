@@ -21,8 +21,10 @@
     #include <cextend/memory.h>
     #include "zap_srv_socket.h"
     #include <cextend/exception.h>
-    #include "../string/message_entry_table.h"
+    #include <cextend/snprintf_alloc.h>
+    #include "../graphical/graphical.h"
     #include "../string/string_entry_table.h"
+    #include "../string/message_entry_table.h"
 
     #define ZAP_SRV_MAX_SIGINT 3
     #define ZAP_SRV_TIMEOUT 10000
@@ -44,5 +46,7 @@ void send_client(const char *buffer, zap_srv_socket_t *client);
 
 void disconnect_client(zap_srv_t *server, size_t i);
 void handle_client_disconnect(zap_srv_socket_t *client);
+
+void connect_client(zap_srv_player_t *client, zap_srv_parsed_context_t *ctxt);
 
 #endif /* !ZAP_SRV_SERVER_INTERNAL_H_ */

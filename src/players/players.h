@@ -60,4 +60,6 @@ typedef struct {
     zap_srv_player_actions_t actions_buffer[ZAP_SRV_MAX_ACTIONS];
 } zap_srv_player_t;
 
+void player_actions(zap_srv_player_t *client);
+
 #endif /* !ZAP_SRV_PLAYERS_H_ */
