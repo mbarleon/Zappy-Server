@@ -71,23 +71,26 @@ static void remove_egg(zap_srv_egg_t **list, zap_srv_egg_t *tmp)
  *
  * @param ctxt Pointer to the parsed server context.
  * @param team Name of the team whose egg should be hatched.
+ *
+ * @return Position of the egg that was hatched.
  */
-void hatch_egg(zap_srv_parsed_context_t *ctxt, const char *team)
+zap_srv_pos_t hatch_egg(zap_srv_parsed_context_t *ctxt, const char *team)
 {
     zap_srv_team_t *my_team = find_team(ctxt, team);
     size_t egg_index = (size_t)rand() % ZAP_SRV_EGG_MAX;
 
     if (!my_team) {
-        return;
+        return (zap_srv_pos_t){0, 0};
     }
     for (zap_srv_egg_t *tmp = my_team->eggs; tmp; tmp = tmp->next) {
         egg_index--;
         if (egg_index == 0) {
             remove_egg(&my_team->eggs, tmp);
-            return;
+            return tmp->pos;
         }
         if (!tmp->next) {
             tmp = my_team->eggs;
         }
     }
+    return (zap_srv_pos_t){0, 0};
 }

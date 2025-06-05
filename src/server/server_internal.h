@@ -25,6 +25,7 @@
     #include "../egg/egg_functions.h"
     #include <cextend/snprintf_alloc.h>
     #include "../graphical/graphical.h"
+    #include "../players/player_functions.h"
     #include "../string/string_entry_table.h"
     #include "../string/message_entry_table.h"
 
@@ -44,7 +45,6 @@ void accept_new_clients(zap_srv_parsed_context_t *ctxt);
 void read_message_from_clients(zap_srv_parsed_context_t *ctxt);
 
 ssize_t recv_client(char **line, zap_srv_socket_t *client, size_t *buf_size);
-void send_client(const char *buffer, zap_srv_socket_t *client);
 
 void disconnect_client(zap_srv_t *server, size_t i);
 void handle_client_disconnect(zap_srv_socket_t *client);

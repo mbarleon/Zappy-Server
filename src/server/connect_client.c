@@ -108,19 +108,23 @@ static size_t compute_slots_in_team(char *team, zap_srv_parsed_context_t *ctxt)
  * @param team The name of the team to update.
  * @param ctxt The server context containing the list of teams.
  */
-static void decrease_team_slots(char *team, zap_srv_parsed_context_t *ctxt)
+static zap_srv_pos_t decrease_team_slots(char *team,
+    zap_srv_parsed_context_t *ctxt)
 {
+    zap_srv_pos_t pos;
+
     if (strcmp(team, "GRAPHIC") == 0) {
-        return;
+        return (zap_srv_pos_t){0, 0};
     }
     for (zap_srv_team_t *tmp = ctxt->teams; tmp; tmp = tmp->next) {
         if (strcmp(team, tmp->name) == 0) {
             tmp->num_clients += 1;
             tmp->available_slots -= 1;
-            hatch_egg(ctxt, team);
-            return;
+            pos = hatch_egg(ctxt, team);
+            return pos;
         }
     }
+    return (zap_srv_pos_t){0, 0};
 }
 
 /**
@@ -165,10 +169,13 @@ static void send_player_connect_message(zap_srv_player_t *client,
     zap_srv_parsed_context_t *ctxt, size_t slots_in_team)
 {
     char *block;
+    zap_srv_pos_t pos;
 
     block = snprintf_alloc("%ld\n%ld %ld\n", slots_in_team - 1, ctxt->map.x,
         ctxt->map.y);
-    decrease_team_slots(client->team, ctxt);
+    pos = decrease_team_slots(client->team, ctxt);
+    client->pos.x = pos.x;
+    client->pos.y = pos.y;
     if (block) {
         send_client(block, &client->sock);
         free(block);

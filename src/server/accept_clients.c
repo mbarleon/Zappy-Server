@@ -54,6 +54,23 @@ static void init_client(zap_srv_socket_t *client_sock)
 }
 
 /**
+ * @brief Initializes the actions array for a client.
+ *
+ * This function sets all actions in the client's actions array to the default
+ * action (ZAP_SRV_PL_NONE) and resets their arguments to NULL.
+ *
+ * @param client Pointer to the zap_srv_player_t structure representing the
+ * client.
+ */
+static void init_client_actions(zap_srv_player_t *client)
+{
+    for (size_t i = 0; i < ZAP_SRV_MAX_ACTIONS; ++i) {
+        client->actions[i].action = ZAP_SRV_PL_NONE;
+        client->actions[i].arguments = NULL;
+    }
+}
+
+/**
  * @brief Accepts a new client connection to the server.
  *
  * This function checks if the server has reached the maximum number of allowed
@@ -74,6 +91,7 @@ void accept_new_clients(zap_srv_parsed_context_t *ctxt)
         return;
     }
     init_client(&client->sock);
+    init_client_actions(client);
     if (accept_client(ctxt->server.sock.fd, &client->sock) == ZAP_SRV_ERROR) {
         safe_free((void **)&client->sock.ip);
         return;

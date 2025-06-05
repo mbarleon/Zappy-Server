@@ -22,20 +22,23 @@
  * @param ctxt   Pointer to the parsed server context.
  * @param client Pointer to the client/player structure.
  * @param i      Index of the client in the server's client list.
+ * @param read   Boolean that tells the server wether it should read from the
+ * client.
  */
 static void do_action(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client,
-    size_t i)
+    size_t i, bool read)
 {
-    if (recv_client(&client->buf, &client->sock, &client->buf_size) == -1) {
+    if (read &&
+        recv_client(&client->buf, &client->sock, &client->buf_size) == -1) {
         disconnect_client(&ctxt->server, i);
         return;
     }
-    if (client->team == NULL) {
+    if (read && client->team == NULL) {
         connect_client(client, ctxt);
-    } else if (strcmp(client->team, "GRAPHIC") == 0) {
+    } else if (read && strcmp(client->team, "GRAPHIC") == 0) {
         graphic_actions(client);
     } else {
-        player_actions(client);
+        player_actions(ctxt, client);
     }
 }
 
@@ -53,13 +56,13 @@ static void do_action(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client,
  * @param i      Index of the client in the server's client list.
  */
 static void try_do_action(zap_srv_parsed_context_t *ctxt,
-    zap_srv_player_t *client, size_t i)
+    zap_srv_player_t *client, size_t i, bool read)
 {
     cextend_exception_code_t code = 0;
     cextend_exception_context_t *except_ctxt = INIT_TRY;
 
     TRY(code, except_ctxt) {
-        do_action(ctxt, client, i);
+        do_action(ctxt, client, i, read);
     } CATCH(code, CEXTEND_EXCEPTION_BAD_ALLOC) {
         CEXTEND_LOG(CEXTEND_LOG_ERROR, fetch_string(ZAP_SRV_CAUGHT_ERROR),
             "client handling", get_exception_str(code));
@@ -105,7 +108,10 @@ void read_message_from_clients(zap_srv_parsed_context_t *ctxt)
             disconnect_client(&ctxt->server, i);
             continue;
         }
-        if (ctxt->server.fds[i + 1].revents & POLLIN)
-            try_do_action(ctxt, &ctxt->server.clients[i], i);
+        if (ctxt->server.fds[i + 1].revents & POLLIN) {
+            try_do_action(ctxt, &ctxt->server.clients[i], i, true);
+            continue;
+        }
+        try_do_action(ctxt, &ctxt->server.clients[i], i, false);
     }
 }

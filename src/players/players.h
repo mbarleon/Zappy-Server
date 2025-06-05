@@ -18,6 +18,31 @@
     #define ZAP_SRV_MAX_ACTIONS 10
 
 /**
+ * @brief Structure representing an action performed by a player.
+ *
+ * This structure holds information about a player's action, including
+ * the arguments associated with the action, the timestamp when the action
+ * was performed, and the specific action type.
+ *
+ * @typedef zap_srv_actions_t
+ */
+typedef struct {
+    /**
+     * @brief Pointer to a string containing the action's arguments.
+     */
+    char *arguments;
+    /**
+     * @brief Time at which the action was performed.
+     */
+    time_t timestamp;
+    /**
+     * @brief The type of action performed by the player
+     * (zap_srv_player_actions_t).
+     */
+    zap_srv_player_actions_t action;
+} zap_srv_actions_t;
+
+/**
  * @struct player_t
  * @brief Represents a player in the Zappy server.
  *
@@ -53,15 +78,9 @@ typedef struct {
      */
     size_t inventory[ZAP_SRV_ELEMENTS_QUANTITY];
     /**
-     * @brief Timestamps for each action in the player's action buffer.
+     * @brief Action buffer for the current player.
      */
-    time_t actions_timestamp[ZAP_SRV_MAX_ACTIONS];
-    /**
-     * @brief Buffer holding the player's pending actions.
-     */
-    zap_srv_player_actions_t actions_buffer[ZAP_SRV_MAX_ACTIONS];
+    zap_srv_actions_t actions[ZAP_SRV_MAX_ACTIONS];
 } zap_srv_player_t;
-
-void player_actions(zap_srv_player_t *client);
 
 #endif /* !ZAP_SRV_PLAYERS_H_ */

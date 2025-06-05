@@ -32,6 +32,7 @@
  * @var ZAP_SRV_PL_INCANTATION  Start an incantation (level up).
  */
 typedef enum {
+    ZAP_SRV_PL_NONE = -1,
     ZAP_SRV_PL_FORWARD,
     ZAP_SRV_PL_RIGHT,
     ZAP_SRV_PL_LEFT,
