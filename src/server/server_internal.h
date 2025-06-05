@@ -48,5 +48,7 @@ void disconnect_client(zap_srv_t *server, size_t i);
 void handle_client_disconnect(zap_srv_socket_t *client);
 
 void connect_client(zap_srv_player_t *client, zap_srv_parsed_context_t *ctxt);
+void send_graphic_connect_message(zap_srv_player_t *client,
+    zap_srv_parsed_context_t *ctxt);
 
 #endif /* !ZAP_SRV_SERVER_INTERNAL_H_ */
