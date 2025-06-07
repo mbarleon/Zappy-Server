@@ -8,6 +8,7 @@
 #ifndef ZAP_SRV_MAP_H_
     #define ZAP_SRV_MAP_H_
     #include <stddef.h>
+    #include "../players/players.h"
     #include "../elements/elements.h"
 
 /**
@@ -33,5 +34,10 @@ typedef struct {
 } zap_srv_map_t;
 
 void generate_map(zap_srv_map_t *map);
+zap_srv_pos_t compute_next_position(zap_srv_pos_t *pos,
+    zap_srv_player_orientation_t orientation, zap_srv_pos_t *map_size);
+zap_srv_pos_t compute_position(zap_srv_pos_t *pos,
+    zap_srv_player_orientation_t orientation, zap_srv_pos_t *map_size,
+    size_t offset);
 
 #endif /* !ZAP_SRV_MAP_H_ */
