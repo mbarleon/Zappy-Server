@@ -25,6 +25,10 @@
  */
 typedef struct {
     /**
+     * @brief Last time ressources spawned.
+     */
+    double last_spawn;
+    /**
      * @brief Current number of clients
      */
     size_t num_clients;

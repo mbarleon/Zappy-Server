@@ -8,6 +8,30 @@
 #include "server_internal.h"
 
 /**
+ * @brief Checks if it's time to spawn new resources on the map and triggers
+ * the spawn if needed.
+ *
+ * This function compares the current time with the calculated time for the
+ * next resource spawn, based on the server's frequency and the last spawn
+ * time. If the current time exceeds or equals the scheduled spawn time, it
+ * calls generate_map() to spawn resources and updates the last spawn time.
+ *
+ * @param ctxt Pointer to the parsed server context containing server state and
+ * map information.
+ */
+static void check_ressources_spawn(zap_srv_t *server, zap_srv_map_t *map)
+{
+    double current_time = get_time();
+    double real_time = server->last_spawn +
+        (ZAP_SRV_RESOURCE_SPAWN_TIMER / (double)server->frequency);
+
+    if (current_time >= real_time) {
+        generate_map(map);
+        server->last_spawn = get_time();
+    }
+}
+
+/**
  * @brief Initializes the server structure and prepares it to accept clients.
  *
  * This function sets up the server socket, allocates memory for the client
@@ -30,6 +54,7 @@ static void init_server(zap_srv_t *server)
         server->clients[i - 1].sock.fd = -1;
     }
     server->num_clients = 0;
+    server->last_spawn = get_time();
 }
 
 /**
@@ -77,6 +102,7 @@ void run_server(zap_srv_parsed_context_t *ctxt)
 
     init_server(&ctxt->server);
     while (keep_running(false)) {
+        check_ressources_spawn(&ctxt->server, &ctxt->map);
         poll_count = poll(ctxt->server.fds,
             (nfds_t)(ctxt->server.num_clients + 1), ZAP_SRV_TIMEOUT);
         if (keep_running(false) && poll_count < 0) {

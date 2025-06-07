@@ -8,6 +8,34 @@
 #include "server_internal.h"
 
 /**
+ * @brief Handles the unexpected disconnection of a client.
+ *
+ * This function is called when a client disconnects unexpectedly from the
+ * server. It searches for the team associated with the disconnected client and
+ * decrements the team's client count if found. If the team is not found, it
+ * sends a player disconnect information (PDI) message and disconnects the
+ * client from the server.
+ *
+ * @param ctxt Pointer to the parsed server context containing server and team
+ * information.
+ * @param i Index of the client in the server's client array.
+ */
+static void handle_unexpected_disconnect(zap_srv_parsed_context_t *ctxt,
+    size_t i)
+{
+    zap_srv_player_t client = ctxt->server.clients[i];
+
+    for (zap_srv_team_t *tmp = ctxt->teams; tmp; tmp = tmp->next) {
+        if (strcmp(tmp->name, client.team) == 0) {
+            tmp->num_clients -= 1;
+            break;
+        }
+    }
+    send_pdi(ctxt, &client);
+    disconnect_client(&ctxt->server, i);
+}
+
+/**
  * @brief Executes the appropriate action for a connected client based on their
  * team.
  *
@@ -61,7 +89,7 @@ static void do_action(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client,
 {
     if (read &&
         recv_client(&client->buf, &client->sock, &client->buf_size) == -1) {
-        disconnect_client(&ctxt->server, i);
+        handle_unexpected_disconnect(ctxt, i);
         return;
     }
     if (read && client->team == NULL) {
@@ -130,14 +158,14 @@ void read_message_from_clients(zap_srv_parsed_context_t *ctxt)
 {
     for (size_t i = 0; i < ctxt->server.num_clients; ++i) {
         while (ctxt->server.clients[i].sock.fd == ZAP_SRV_SOCK_ERROR) {
-            disconnect_client(&ctxt->server, i);
+            handle_unexpected_disconnect(ctxt, i);
         }
         if (i >= ctxt->server.num_clients) {
             break;
         }
         if (ctxt->server.fds[i + 1].revents & (POLLHUP | POLLERR)) {
             handle_client_disconnect(&ctxt->server.clients[i].sock);
-            disconnect_client(&ctxt->server, i);
+            handle_unexpected_disconnect(ctxt, i);
             continue;
         }
         if (ctxt->server.fds[i + 1].revents & POLLIN) {

@@ -34,6 +34,7 @@
     #define ZAP_SRV_TIMEOUT 100
     #define ZAP_SRV_COMMAND_LENGTH 2048
     #define ZAP_SRV_MAX_LINE_SIZE 2097152
+    #define ZAP_SRV_RESOURCE_SPAWN_TIMER 20.0
 
 bool keep_running(bool running);
 void handle_signals(UNUSED int sig, UNUSED siginfo_t *info,
