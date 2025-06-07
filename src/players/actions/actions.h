@@ -8,6 +8,7 @@
 #ifndef ZAP_SRV_PLAYER_ACTIONS_INTERNAL_H_
     #define ZAP_SRV_PLAYER_ACTIONS_INTERNAL_H_
     #include "../player_functions.h"
+    #include <cextend/snprintf_alloc.h>
 
 void player_set(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client);
 void player_look(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client);

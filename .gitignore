@@ -50,3 +50,4 @@ temp/
 build/
 *.dylib
 !test_compilation.yml
+.fuse_*
