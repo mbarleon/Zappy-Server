@@ -13,6 +13,6 @@
     #include <stdbool.h>
 
 bool is_valid_char(char c);
-zap_srv_pos_t *generate_shuffled_positions(size_t x, size_t y);
+zap_srv_pos_t *generate_shuffled_positions(ssize_t x, ssize_t y);
 
 #endif /* !ZAP_SRV_UTILS_H_ */

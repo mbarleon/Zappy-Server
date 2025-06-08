@@ -20,23 +20,23 @@
  * shuffled positions,  or NULL if memory allocation fails. The caller is
  * responsible for freeing the memory.
  */
-zap_srv_pos_t *generate_shuffled_positions(size_t x, size_t y)
+zap_srv_pos_t *generate_shuffled_positions(ssize_t x, ssize_t y)
 {
     size_t offset;
     size_t idx = 0;
     zap_srv_pos_t tmp;
-    size_t map_size = x * y;
-    zap_srv_pos_t *positions = malloc(sizeof(zap_srv_pos_t) * map_size);
+    ssize_t m_size = x * y;
+    zap_srv_pos_t *positions = malloc(sizeof(zap_srv_pos_t) * (size_t)m_size);
 
     if (!positions)
         return NULL;
-    for (size_t i = 0; i < x; ++i)
-        for (size_t j = 0; j < y; ++j) {
+    for (ssize_t i = 0; i < x; ++i)
+        for (ssize_t j = 0; j < y; ++j) {
             positions[idx] = (zap_srv_pos_t){i, j};
             idx++;
         }
-    for (size_t i = map_size - 1; i > 0; --i) {
-        offset = (size_t)((size_t)rand() % (i + 1));
+    for (ssize_t i = m_size - 1; i > 0; --i) {
+        offset = (size_t)((size_t)rand() % ((size_t)i + 1));
         tmp = positions[i];
         positions[i] = positions[offset];
         positions[offset] = tmp;

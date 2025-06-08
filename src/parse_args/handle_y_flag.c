@@ -30,7 +30,10 @@ zap_srv_flags_t handle_y_flag(const char **av, zap_srv_parsed_context_t *ctxt,
 {
     size_t y = get_size_t_from_str(av[(*i) + 1]);
 
-    ctxt->map.y = y;
+    if (y > SSIZE_MAX || y < 10) {
+        THROW(CEXTEND_EXCEPTION_INVALID_ARGUMENT);
+    }
+    ctxt->map.y = (ssize_t)y;
     *i += 2;
     return ZAP_SRV_FLAG_Y;
 }

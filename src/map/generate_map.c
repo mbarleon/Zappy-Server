@@ -51,7 +51,7 @@ static bool set_density(size_t i, size_t j, float *density)
  * @note The function frees the memory allocated for current_density.
  */
 static void compute_element_targets(size_t *element_targets,
-    float *current_density, size_t map_size)
+    float *current_density, ssize_t map_size)
 {
     float density;
     size_t target;
@@ -112,8 +112,8 @@ static bool try_place_elem(zap_srv_map_t *map, zap_srv_pos_t *positions,
 {
     zap_srv_pos_t pos;
     zap_srv_elements_list_t *new_elem;
-    size_t x = positions[pos_idx].x;
-    size_t y = positions[pos_idx].y;
+    ssize_t x = positions[pos_idx].x;
+    ssize_t y = positions[pos_idx].y;
 
     new_elem = (zap_srv_elements_list_t *)safe_calloc(
         1, sizeof(zap_srv_elements_list_t), NULL);
@@ -141,7 +141,7 @@ static bool try_place_elem(zap_srv_map_t *map, zap_srv_pos_t *positions,
  * @param map_size The total number of available positions in the map.
  */
 static void place_elements_on_map(zap_srv_map_t *map, zap_srv_pos_t *positions,
-    size_t *element_targets, size_t map_size)
+    size_t *element_targets, ssize_t map_size)
 {
     size_t placed[ZAP_SRV_ELEMENTS_QUANTITY] = {0};
     size_t total_to_place = 0;
@@ -155,7 +155,7 @@ static void place_elements_on_map(zap_srv_map_t *map, zap_srv_pos_t *positions,
             try_place_elem(map, positions, elem, pos_idx);
             placed[elem]++;
             total_to_place--;
-            pos_idx = (pos_idx + 1) % map_size;
+            pos_idx = (pos_idx + 1) % (size_t)map_size;
         }
         elem = (elem + 1) % ZAP_SRV_ELEMENTS_QUANTITY;
     }
@@ -176,10 +176,10 @@ static void place_elements_on_map(zap_srv_map_t *map, zap_srv_pos_t *positions,
 static void init_map(zap_srv_map_t *map)
 {
     map->elements = (zap_srv_elements_list_t ***)safe_calloc(
-        map->x, sizeof(zap_srv_elements_list_t **), NULL);
-    for (size_t i = 0; i < map->x; ++i) {
+        (size_t)map->x, sizeof(zap_srv_elements_list_t **), NULL);
+    for (ssize_t i = 0; i < map->x; ++i) {
         map->elements[i] = (zap_srv_elements_list_t **)safe_calloc(
-            map->y, sizeof(zap_srv_elements_list_t *), NULL);
+            (size_t)map->y, sizeof(zap_srv_elements_list_t *), NULL);
     }
 }
 
@@ -201,7 +201,7 @@ static void init_map(zap_srv_map_t *map)
  */
 void generate_map(zap_srv_map_t *map)
 {
-    size_t map_size;
+    ssize_t map_size;
     float *current_density = NULL;
     zap_srv_pos_t *positions = NULL;
     size_t element_targets[ZAP_SRV_ELEMENTS_QUANTITY] = {0};

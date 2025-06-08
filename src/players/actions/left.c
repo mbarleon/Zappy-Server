@@ -7,6 +7,17 @@
 
 #include "actions.h"
 
+/**
+ * @brief Rotates the player's orientation to the left (counter-clockwise).
+ *
+ * This function updates the orientation of the given player to the direction
+ * to their left, based on their current orientation (NORTH -> WEST, EAST ->
+ * NORTH, SOUTH -> EAST, WEST -> SOUTH). After updating the orientation,
+ * it sends an acknowledgment ("ok\n") to the player's socket.
+ *
+ * @param ctxt Unused parsed context pointer.
+ * @param client Pointer to the player whose orientation will be updated.
+ */
 void player_left(__attribute__((unused))zap_srv_parsed_context_t *ctxt,
     zap_srv_player_t *client)
 {

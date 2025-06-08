@@ -22,11 +22,11 @@ typedef struct {
     /**
      * @brief The x-coordinate of the map position.
      */
-    size_t x;
+    ssize_t x;
     /**
      * @brief The y-coordinate of the map position.
      */
-    size_t y;
+    ssize_t y;
     /**
      * @brief The elements in the map.
      */

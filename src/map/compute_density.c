@@ -65,7 +65,7 @@ static void count_element_types(const zap_srv_elements_list_t *element,
  */
 float *compute_density(const zap_srv_map_t *map)
 {
-    const size_t map_size = map->x * map->y;
+    const ssize_t map_size = map->x * map->y;
     float *table = (float *)malloc(sizeof(float) * ZAP_SRV_ELEMENTS_QUANTITY);
 
     if (!table || map_size == 0) {
@@ -75,8 +75,8 @@ float *compute_density(const zap_srv_map_t *map)
     if (!map->elements) {
         return table;
     }
-    for (size_t i = 0; i < map->x; ++i) {
-        for (size_t j = 0; j < map->y; ++j) {
+    for (ssize_t i = 0; i < map->x; ++i) {
+        for (ssize_t j = 0; j < map->y; ++j) {
             count_element_types(map->elements[i][j], table);
         }
     }

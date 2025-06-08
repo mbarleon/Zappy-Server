@@ -79,7 +79,7 @@ zap_srv_pos_t compute_position(zap_srv_pos_t *pos,
         (long long)map_size->x;
     new_y = ((long long)pos->y + y_offset + (long long)map_size->y) %
         (long long)map_size->y;
-    return (zap_srv_pos_t){(size_t)new_x, (size_t)new_y};
+    return (zap_srv_pos_t){(ssize_t)new_x, (ssize_t)new_y};
 }
 
 /**

@@ -7,7 +7,7 @@
 
 #ifndef ZAP_SRV_TYPES_H_
     #define ZAP_SRV_TYPES_H_
-    #include <stddef.h>
+    #include <sys/types.h>
 
 /**
  * @brief Represents a position on the map with x and y coordinates.
@@ -19,11 +19,11 @@ typedef struct {
     /**
      * @brief X coordinate of the position.
      */
-    size_t x;
+    ssize_t x;
     /**
      * @brief Y coordinate of the position.
      */
-    size_t y;
+    ssize_t y;
 } zap_srv_pos_t;
 
 #endif /* !ZAP_SRV_TYPES_H_ */

@@ -53,5 +53,6 @@ typedef struct zap_srv_elements_list_s {
 } zap_srv_elements_list_t;
 
 extern const float density_table[];
+const char *get_elements_str(zap_srv_elements_t element);
 
 #endif /* !ZAP_SRV_ELEMENTS_H_ */

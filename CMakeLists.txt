@@ -90,7 +90,7 @@ target_compile_options(zappy_server PRIVATE
     -Wno-format-security
 )
 
-target_link_libraries(zappy_server PRIVATE cextend)
+target_link_libraries(zappy_server PRIVATE cextend m)
 
 target_include_directories(zappy_server PRIVATE
     $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
@@ -131,7 +131,7 @@ endif()
 
 target_compile_definitions(zap_srv_unit_tests PRIVATE UNIT_TESTS=1)
 
-target_link_libraries(zap_srv_unit_tests PRIVATE criterion, cextend)
+target_link_libraries(zap_srv_unit_tests PRIVATE criterion cextend m)
 
 target_include_directories(zap_srv_unit_tests PRIVATE
     $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>

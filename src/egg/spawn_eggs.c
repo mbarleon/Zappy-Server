@@ -16,7 +16,7 @@
  * @param b The second value to compare.
  * @return The smaller of the two values.
  */
-static size_t min(size_t a, size_t b)
+static size_t my_min(size_t a, size_t b)
 {
     return a < b ? a : b;
 }
@@ -37,13 +37,13 @@ static size_t min(size_t a, size_t b)
 static size_t compute_target_eggs_per_team(
     const zap_srv_parsed_context_t *ctxt)
 {
-    const size_t map_size = ctxt->map.x * ctxt->map.y;
+    const ssize_t map_size = ctxt->map.x * ctxt->map.y;
     size_t nteams = 0;
 
     for (zap_srv_team_t *tmp = ctxt->teams; tmp; tmp = tmp->next) {
         nteams++;
     }
-    return min((size_t)floor((double)map_size / (double)nteams),
+    return my_min((size_t)floor((double)map_size / (double)nteams),
         ctxt->max_clients_per_team);
 }
 

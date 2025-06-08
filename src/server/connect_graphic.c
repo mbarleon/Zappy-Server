@@ -93,7 +93,7 @@ static void send_tna(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client)
  * @param j The y-coordinate of the map block.
  */
 static void send_bct(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client,
-    size_t i, size_t j)
+    ssize_t i, ssize_t j)
 {
     char *block;
     size_t quantity_table[ZAP_SRV_ELEMENTS_QUANTITY] = {0};
@@ -134,8 +134,8 @@ void send_graphic_connect_message(zap_srv_player_t *client,
         send_client(block, &client->sock);
         free(block);
     }
-    for (size_t i = 0; i < ctxt->map.x; ++i) {
-        for (size_t j = 0; j < ctxt->map.y; ++j) {
+    for (ssize_t i = 0; i < ctxt->map.x; ++i) {
+        for (ssize_t j = 0; j < ctxt->map.y; ++j) {
             send_bct(ctxt, client, i, j);
         }
     }
