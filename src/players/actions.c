@@ -20,7 +20,7 @@
  * @note The size of the array determines the number of supported actions.
  */
 static void (* const action_ptrs[])(zap_srv_parsed_context_t *,
-    zap_srv_player_t *) = {
+    zap_srv_player_t *, const char *arguments) = {
     &player_forward,
     &player_right,
     &player_left,
@@ -55,7 +55,8 @@ static void do_action(zap_srv_parsed_context_t *ctxt,
         send_client("ko\n", &client->sock);
         return;
     }
-    action_ptrs[client->actions[i].action](ctxt, client);
+    action_ptrs[client->actions[i].action](ctxt, client,
+        client->actions[i].arguments);
 }
 
 /**

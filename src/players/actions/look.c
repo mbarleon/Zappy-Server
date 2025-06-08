@@ -184,8 +184,10 @@ static void end_player_look(char **buf, zap_srv_socket_t *sock,
  * state.
  * @param client Pointer to the player structure representing the client
  * issuing the look command.
+ * @param arguments Unused arguments for the function.
  */
-void player_look(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client)
+void player_look(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client,
+    UNUSED const char *arguments)
 {
     zap_srv_pos_t pos;
     char *buf = strdup("[");

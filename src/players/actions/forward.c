@@ -17,8 +17,10 @@
  *
  * @param ctxt Pointer to the parsed server context containing map information.
  * @param client Pointer to the player structure to be moved.
+ * @param arguments Arguments for the function (unused).
  */
-void player_forward(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client)
+void player_forward(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client,
+    UNUSED const char *arguments)
 {
     zap_srv_pos_t map_size = (zap_srv_pos_t){ctxt->map.x, ctxt->map.y};
     zap_srv_pos_t new_pos =

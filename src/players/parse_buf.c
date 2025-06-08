@@ -96,7 +96,7 @@ static void add_action(zap_srv_player_t *player, const char *arg,
  */
 static bool is_full_command_match(const char *cmd, const char *line)
 {
-    return strcmp(cmd, line) == 0;
+    return strcasecmp(cmd, line) == 0;
 }
 
 /**
@@ -114,7 +114,7 @@ static bool is_prefix_command_match(const char *cmd, const char *line)
 {
     size_t cmd_len = strlen(cmd);
 
-    return strncmp(cmd, line, cmd_len) == 0;
+    return strncasecmp(cmd, line, cmd_len) == 0;
 }
 
 /**

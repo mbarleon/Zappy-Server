@@ -10,6 +10,7 @@
     #include "players.h"
     #include <string.h>
     #include <stdlib.h>
+    #include <strings.h>
     #include <stdbool.h>
     #include <cextend/memory.h>
     #include "../server/server.h"

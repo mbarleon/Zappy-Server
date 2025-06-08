@@ -24,6 +24,7 @@
  * - THYSTAME: Represents the thystame resource.
  */
 typedef enum {
+    UNKNOWN_ELEMENT = -1,
     FOOD,
     LINEMATE,
     DERAUMERE,
@@ -54,5 +55,6 @@ typedef struct zap_srv_elements_list_s {
 
 extern const float density_table[];
 const char *get_elements_str(zap_srv_elements_t element);
+zap_srv_elements_t get_element_from_str(const char *str);
 
 #endif /* !ZAP_SRV_ELEMENTS_H_ */

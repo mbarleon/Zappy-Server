@@ -17,6 +17,7 @@
     #include "../server/zap_srv_socket.h"
 
     #define ZAP_SRV_MAX_ACTIONS 10
+    #define ZAP_SRV_FOOD_TIME_UNITS 126
     #define ZAP_SRV_BASE_TIME_UNITS 1260
 
 /**

@@ -41,9 +41,10 @@ static void send_connct_nbr(zap_srv_player_t *client, zap_srv_team_t *team)
  * @param ctxt Pointer to the parsed server context containing team
  * information.
  * @param client Pointer to the player requesting the "connect_nbr" action.
+ * @param arguments Arguments for the function (unused).
  */
 void player_connect_nbr(zap_srv_parsed_context_t *ctxt,
-    zap_srv_player_t *client)
+    zap_srv_player_t *client, UNUSED const char *arguments)
 {
     for (zap_srv_team_t *tmp = ctxt->teams; tmp; tmp = tmp->next) {
         if (strcmp(tmp->name, client->team) == 0) {

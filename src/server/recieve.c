@@ -25,6 +25,10 @@ static void handle_unexpected_disconnect(zap_srv_parsed_context_t *ctxt,
 {
     zap_srv_player_t client = ctxt->server.clients[i];
 
+    if (!client.team) {
+        disconnect_client(&ctxt->server, i);
+        return;
+    }
     for (zap_srv_team_t *tmp = ctxt->teams; tmp; tmp = tmp->next) {
         if (strcmp(tmp->name, client.team) == 0) {
             tmp->num_clients -= 1;

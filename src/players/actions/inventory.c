@@ -17,9 +17,10 @@
  *
  * @param ctxt Unused parsed context parameter.
  * @param client Pointer to the player structure whose inventory will be sent.
+ * @param arguments Unused arguments for the function.
  */
-void player_inventory(__attribute__((unused))zap_srv_parsed_context_t *ctxt,
-    zap_srv_player_t *client)
+void player_inventory(UNUSED zap_srv_parsed_context_t *ctxt,
+    zap_srv_player_t *client, UNUSED const char *arguments)
 {
     char *block;
 
