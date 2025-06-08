@@ -190,6 +190,8 @@ void player_actions(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client,
     if (client->dead) {
         return;
     }
-    consume_actions(ctxt, client);
+    if (!client->in_incentation) {
+        consume_actions(ctxt, client);
+    }
     parse_buf(client);
 }

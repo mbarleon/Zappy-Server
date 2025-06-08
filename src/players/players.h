@@ -62,6 +62,10 @@ typedef enum {
  */
 typedef struct {
     /**
+     * @brief Is player participating to an incantation.
+     */
+    bool in_incentation;
+    /**
      * @brief Is player dead.
      */
     bool dead;
