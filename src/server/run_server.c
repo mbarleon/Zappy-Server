@@ -82,6 +82,21 @@ static void try_accept_clients(zap_srv_parsed_context_t *ctxt)
     END_TRY;
 }
 
+/**
+ * @brief Checks if the game is over by evaluating all teams' status.
+ *
+ * Iterates through all teams in the given context. If any team has available
+ * slots or active clients, the game is not over and the function returns
+ * false.
+ * If a team does not have its 'seg' flag set, it sends a SEG message to that
+ * team.
+ * If all teams have no available slots and no clients, logs that the game has
+ * ended and returns true to indicate the game is over.
+ *
+ * @param ctxt Pointer to the parsed server context containing team
+ * information.
+ * @return true if the game is over for all teams, false otherwise.
+ */
 static bool game_over(zap_srv_parsed_context_t *ctxt)
 {
     for (zap_srv_team_t *tmp = ctxt->teams; tmp; tmp = tmp->next) {
@@ -96,6 +111,17 @@ static bool game_over(zap_srv_parsed_context_t *ctxt)
     return true;
 }
 
+/**
+ * @brief Executes a single routine cycle for the server.
+ *
+ * This function checks if the game is over by calling `game_over()`.
+ * If the game is over, it returns false to indicate the routine should stop.
+ * Otherwise, it spawns resources on the map by calling
+ * `check_ressources_spawn()` and returns true to continue the routine.
+ *
+ * @param ctxt Pointer to the parsed server context structure.
+ * @return true if the routine should continue, false if the game is over.
+ */
 static bool run_routine(zap_srv_parsed_context_t *ctxt)
 {
     if (game_over(ctxt)) {
