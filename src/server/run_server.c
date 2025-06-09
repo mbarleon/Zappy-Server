@@ -82,6 +82,29 @@ static void try_accept_clients(zap_srv_parsed_context_t *ctxt)
     END_TRY;
 }
 
+static bool game_over(zap_srv_parsed_context_t *ctxt)
+{
+    for (zap_srv_team_t *tmp = ctxt->teams; tmp; tmp = tmp->next) {
+        if (tmp->available_slots > 0 || tmp->num_clients > 0) {
+            return false;
+        }
+        if (!tmp->seg) {
+            send_seg(ctxt, tmp);
+        }
+    }
+    CEXTEND_LOG(CEXTEND_LOG_INFO, "Game ended. Stopping server...");
+    return true;
+}
+
+static bool run_routine(zap_srv_parsed_context_t *ctxt)
+{
+    if (game_over(ctxt)) {
+        return false;
+    }
+    check_ressources_spawn(&ctxt->server, &ctxt->map);
+    return true;
+}
+
 /**
  * @brief Runs the main server loop, handling client connections and messages.
  *
@@ -101,8 +124,7 @@ void run_server(zap_srv_parsed_context_t *ctxt)
     int poll_count = -1;
 
     init_server(&ctxt->server);
-    while (keep_running(false)) {
-        check_ressources_spawn(&ctxt->server, &ctxt->map);
+    while (keep_running(false) && run_routine(ctxt)) {
         poll_count = poll(ctxt->server.fds,
             (nfds_t)(ctxt->server.num_clients + 1), ZAP_SRV_TIMEOUT);
         if (keep_running(false) && poll_count < 0) {

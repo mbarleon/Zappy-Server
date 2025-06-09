@@ -8,6 +8,7 @@
 #ifndef ZAP_SRV_TEAM_H_
     #define ZAP_SRV_TEAM_H_
     #include <stddef.h>
+    #include <stdbool.h>
     #include "../egg/egg.h"
 
 /**
@@ -19,6 +20,10 @@
  * and a pointer to the next team in a linked list.
  */
 typedef struct zap_srv_team_s {
+    /**
+     * @brief Is team dead.
+     */
+    bool seg;
     /**
      * @brief The name of the team.
      */
