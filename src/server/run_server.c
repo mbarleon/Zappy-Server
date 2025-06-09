@@ -83,30 +83,35 @@ static void try_accept_clients(zap_srv_parsed_context_t *ctxt)
 }
 
 /**
- * @brief Checks if the game is over by evaluating all teams' status.
+ * @brief Checks if the game is over by determining if only one team remains
+ * active.
  *
- * Iterates through all teams in the given context. If any team has available
- * slots or active clients, the game is not over and the function returns
- * false.
- * If a team does not have its 'seg' flag set, it sends a SEG message to that
- * team.
- * If all teams have no available slots and no clients, logs that the game has
- * ended and returns true to indicate the game is over.
+ * Iterates through the list of teams in the given context. A team is
+ * considered active if it has available slots or connected clients. If more
+ * than one active team is found, the game is not over and the function returns
+ * false. If only one active team remains, it sends a message to the graphical
+ * clients, logs the game end, and returns true to indicate the game is over.
  *
- * @param ctxt Pointer to the parsed server context containing team
- * information.
- * @return true if the game is over for all teams, false otherwise.
+ * @param ctxt Pointer to the parsed server context containing the list of
+ * teams.
+ * @return true if the game is over (only one team remains active), false
+ * otherwise.
  */
 static bool game_over(zap_srv_parsed_context_t *ctxt)
 {
+    zap_srv_team_t *winner = NULL;
+    zap_srv_team_t *winner2 = NULL;
+
     for (zap_srv_team_t *tmp = ctxt->teams; tmp; tmp = tmp->next) {
         if (tmp->available_slots > 0 || tmp->num_clients > 0) {
+            winner2 = winner;
+            winner = tmp;
+        }
+        if (winner && winner2) {
             return false;
         }
-        if (!tmp->seg) {
-            send_seg(ctxt, tmp);
-        }
     }
+    send_seg(ctxt, winner);
     CEXTEND_LOG(CEXTEND_LOG_INFO, "Game ended. Stopping server...");
     return true;
 }
