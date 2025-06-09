@@ -8,6 +8,20 @@
 #include "actions.h"
 
 /**
+ * @brief Returns the minimum of two size_t values.
+ *
+ * Compares the two input values and returns the smaller one.
+ *
+ * @param a First value to compare.
+ * @param b Second value to compare.
+ * @return The smaller of the two input values.
+ */
+static size_t my_min(size_t a, size_t b)
+{
+    return a < b ? a : b;
+}
+
+/**
  * @brief Sends the number of available connection slots for a team to a
  * client.
  *
@@ -23,7 +37,8 @@ static void send_connct_nbr(zap_srv_player_t *client, zap_srv_team_t *team)
 {
     char *block;
 
-    block = snprintf_alloc("%ld\n", team->available_slots);
+    block = snprintf_alloc("%ld\n", my_min(team->available_slots,
+        team->max_clients - team->num_clients));
     if (block) {
         send_client(block, &client->sock);
         free(block);

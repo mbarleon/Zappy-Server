@@ -11,6 +11,7 @@
     #include <cextend/macro.h>
     #include "../player_functions.h"
     #include <cextend/snprintf_alloc.h>
+    #include "../../egg/egg_functions.h"
 
 void player_set(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client,
     const char *arguments);

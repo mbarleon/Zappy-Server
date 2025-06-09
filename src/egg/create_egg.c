@@ -51,9 +51,8 @@ zap_srv_egg_t *create_egg(zap_srv_pos_t *pos, ssize_t player_number)
  * @brief Adds a new egg to the end of the egg list.
  *
  * This function creates a new egg with the specified position and player
- * number, and appends it to the end of the given egg list. If the list is
- * empty, the new egg becomes the first element. If the egg list pointer is
- * NULL, the function does nothing.
+ * number, and adds it to the begining of the egg list. If the egg list pointer
+ * is NULL, the function does nothing.
  *
  * @param egg_list Pointer to the pointer of the head of the egg list.
  * @param pos Pointer to the position structure for the new egg.
@@ -62,19 +61,12 @@ zap_srv_egg_t *create_egg(zap_srv_pos_t *pos, ssize_t player_number)
 void add_egg(zap_srv_egg_t **egg_list, zap_srv_pos_t *pos,
     ssize_t player_number)
 {
-    zap_srv_egg_t *tmp;
     zap_srv_egg_t *new_egg;
 
     if (!egg_list) {
         return;
     }
     new_egg = create_egg(pos, player_number);
-    if (!*egg_list) {
-        *egg_list = new_egg;
-        return;
-    }
-    for (tmp = *egg_list; tmp->next; tmp = tmp->next);
-    if (tmp) {
-        tmp->next = new_egg;
-    }
+    new_egg->next = *egg_list;
+    *egg_list = new_egg;
 }

@@ -7,6 +7,21 @@
 
 #include "server_internal.h"
 
+
+/**
+ * @brief Returns the minimum of two size_t values.
+ *
+ * Compares the two input values and returns the smaller one.
+ *
+ * @param a First value to compare.
+ * @param b Second value to compare.
+ * @return The smaller of the two input values.
+ */
+static size_t my_min(size_t a, size_t b)
+{
+    return a < b ? a : b;
+}
+
 /**
  * @brief Generates and returns a unique, incrementing index value.
  *
@@ -85,13 +100,21 @@ static bool team_exists(char *team, zap_srv_parsed_context_t *ctxt)
  */
 static size_t compute_slots_in_team(char *team, zap_srv_parsed_context_t *ctxt)
 {
+    int cmp;
+
     if (strcmp(team, "GRAPHIC") == 0) {
         return 1;
     }
     for (zap_srv_team_t *tmp = ctxt->teams; tmp; tmp = tmp->next) {
-        if (strcmp(team, tmp->name) == 0) {
-            return tmp->available_slots;
+        cmp = strcmp(team, tmp->name);
+        if (cmp != 0) {
+            continue;
         }
+        if (tmp->num_clients >= tmp->max_clients) {
+            return 0;
+        }
+        return my_min(tmp->available_slots,
+            tmp->max_clients - tmp->num_clients);
     }
     return 0;
 }

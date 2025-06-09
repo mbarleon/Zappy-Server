@@ -41,7 +41,8 @@ static void send_enw_line(zap_srv_egg_t *tmp2, zap_srv_player_t *client)
  * @param client Pointer to the graphic client to which the egg information
  * will be sent.
  */
-static void send_enw(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client)
+static void my_send_enw(zap_srv_parsed_context_t *ctxt,
+    zap_srv_player_t *client)
 {
     for (zap_srv_team_t *tmp = ctxt->teams; tmp; tmp = tmp->next) {
         for (zap_srv_egg_t *tmp2 = tmp->eggs; tmp2; tmp2 = tmp2->next) {
@@ -63,7 +64,8 @@ static void send_enw(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client)
  * @param client Pointer to the client player structure to which the messages
  * will be sent.
  */
-static void send_tna(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client)
+static void my_send_tna(zap_srv_parsed_context_t *ctxt,
+    zap_srv_player_t *client)
 {
     char *block;
 
@@ -92,8 +94,8 @@ static void send_tna(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client)
  * @param i The x-coordinate of the map block.
  * @param j The y-coordinate of the map block.
  */
-static void send_bct(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client,
-    ssize_t i, ssize_t j)
+static void my_send_bct(zap_srv_parsed_context_t *ctxt,
+    zap_srv_player_t *client, ssize_t i, ssize_t j)
 {
     char *block;
     size_t quantity_table[ZAP_SRV_ELEMENTS_QUANTITY] = {0};
@@ -136,9 +138,9 @@ void send_graphic_connect_message(zap_srv_player_t *client,
     }
     for (ssize_t i = 0; i < ctxt->map.x; ++i) {
         for (ssize_t j = 0; j < ctxt->map.y; ++j) {
-            send_bct(ctxt, client, i, j);
+            my_send_bct(ctxt, client, i, j);
         }
     }
-    send_tna(ctxt, client);
-    send_enw(ctxt, client);
+    my_send_tna(ctxt, client);
+    my_send_enw(ctxt, client);
 }
