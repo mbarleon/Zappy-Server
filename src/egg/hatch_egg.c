@@ -44,7 +44,7 @@ static void remove_egg(zap_srv_egg_t **list, zap_srv_egg_t *tmp)
 {
     zap_srv_egg_t *tmp2;
 
-    if (!list || !*list || tmp) {
+    if (!list || !*list || !tmp) {
         return;
     }
     if (tmp == *list) {

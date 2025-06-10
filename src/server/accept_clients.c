@@ -70,8 +70,8 @@ static void init_client_actions(zap_srv_player_t *client)
     }
     client->level = 1;
     client->dead = false;
-    client->orientation = (rand() % 4) + 1;
     client->time_units = ZAP_SRV_BASE_TIME_UNITS;
+    client->orientation = (zap_srv_player_orientation_t)((rand() % 4) + 1);
 }
 
 /**
