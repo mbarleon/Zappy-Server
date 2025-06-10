@@ -5,35 +5,8 @@
 ** actions
 */
 
-#include "actions/actions.h"
 #include "player_functions.h"
-
-/**
- * @brief Array of function pointers for player actions.
- *
- * This static array holds pointers to functions that implement various player
- * actions.
- * Each function should take two parameters:
- *   - zap_srv_parsed_context_t *: Pointer to the parsed context of the server.
- *   - zap_srv_player_t *: Pointer to the player structure.
- *
- * @note The size of the array determines the number of supported actions.
- */
-static void (* const action_ptrs[])(zap_srv_parsed_context_t *,
-    zap_srv_player_t *, const char *arguments) = {
-    &player_forward,
-    &player_right,
-    &player_left,
-    &player_look,
-    &player_inventory,
-    &player_broadcast,
-    &player_connect_nbr,
-    &player_fork,
-    &player_eject,
-    &player_take,
-    &player_set,
-    &player_incantation
-};
+#include "actions_arr.h"
 
 /**
  * @brief Executes a specific action for a player based on their action queue.
@@ -51,12 +24,21 @@ static void (* const action_ptrs[])(zap_srv_parsed_context_t *,
 static void do_action(zap_srv_parsed_context_t *ctxt,
     zap_srv_player_t *client, size_t i)
 {
+    bool ret;
+
     if (client->actions[i].action == ZAP_SRV_PL_NONE) {
         send_client("ko\n", &client->sock);
         return;
     }
-    action_ptrs[client->actions[i].action](ctxt, client,
+    client->actions[i].count += 1;
+    ret = action_ptrs[client->actions[i].action](ctxt, client,
         client->actions[i].arguments);
+    if (client->actions[i].action == ZAP_SRV_PL_INCANTATION) {
+        if (ret == false) {
+            client->actions[i].count = 2;
+            return;
+        }
+    }
 }
 
 /**
@@ -74,6 +56,10 @@ static void remove_action(zap_srv_player_t *client, size_t i)
 {
     char *arg = client->actions[i].arguments;
 
+    if (client->actions[i].action == ZAP_SRV_PL_INCANTATION &&
+        client->actions[i].count < 2) {
+        return;
+    }
     safe_free((void **)&arg);
     for (; i < ZAP_SRV_MAX_ACTIONS - 1; ++i) {
         client->actions[i].action = client->actions[i + 1].action;
@@ -82,6 +68,34 @@ static void remove_action(zap_srv_player_t *client, size_t i)
     }
     client->actions[ZAP_SRV_MAX_ACTIONS - 1].action = ZAP_SRV_PL_NONE;
     client->actions[ZAP_SRV_MAX_ACTIONS - 1].arguments = NULL;
+}
+
+/**
+ * @brief Determines whether the player's action processing should continue.
+ *
+ * This function checks the current action of the player at the given index.
+ * It returns true if:
+ *   - The action at index 'i' is ZAP_SRV_PL_NONE (no action to process), or
+ *   - The player is currently in an incantation, but the action at index 'i'
+ *     is not an incantation action (ZAP_SRV_PL_INCANTATION).
+ * Otherwise, it returns false, indicating that action processing should not
+ * continue.
+ *
+ * @param client Pointer to the zap_srv_player_t structure representing the
+ * player.
+ * @param i Index of the action to check in the player's action list.
+ * @return true if action processing should continue, false otherwise.
+ */
+static bool should_continue(zap_srv_player_t *client, size_t i)
+{
+    if (client->actions[i].action == ZAP_SRV_PL_NONE) {
+        return true;
+    }
+    if (client->in_incantation &&
+        client->actions[i].action != ZAP_SRV_PL_INCANTATION) {
+        return true;
+    }
+    return false;
 }
 
 /**
@@ -104,11 +118,14 @@ static void consume_actions(zap_srv_parsed_context_t *ctxt,
     double current_time = get_time();
 
     for (size_t i = 0; i < ZAP_SRV_MAX_ACTIONS; ++i) {
-        if (client->actions[i].action == ZAP_SRV_PL_NONE) {
+        if (should_continue(client, i))
             continue;
-        }
-        real_time = ((double)action_time[client->actions[i].action] /
-            (double)ctxt->server.frequency);
+        if (client->actions[i].action == ZAP_SRV_PL_INCANTATION &&
+            client->actions[i].count == 0)
+            real_time = 0.0;
+        else
+            real_time = ((double)action_time[client->actions[i].action] /
+                (double)ctxt->server.frequency);
         action_timepoint = (double)client->actions[i].timestamp;
         if (current_time >= action_timepoint + real_time) {
             do_action(ctxt, client, i);
@@ -199,8 +216,6 @@ void player_actions(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client,
     if (client->dead) {
         return;
     }
-    if (!client->in_incentation) {
-        consume_actions(ctxt, client);
-    }
+    consume_actions(ctxt, client);
     parse_buf(client);
 }

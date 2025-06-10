@@ -207,7 +207,8 @@ static void send_player_connect_message(zap_srv_player_t *client,
     }
     client->id = get_index();
     client->birth_time = get_time();
-    client->in_incentation = false;
+    client->in_incantation = false;
+    client->player_list = NULL;
 }
 
 /**

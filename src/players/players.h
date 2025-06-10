@@ -31,6 +31,10 @@
  */
 typedef struct {
     /**
+     * @brief Number of times the action has been done.
+     */
+    size_t count;
+    /**
      * @brief Pointer to a string containing the action's arguments.
      */
     char *arguments;
@@ -62,9 +66,13 @@ typedef enum {
  */
 typedef struct {
     /**
+     * @brief Player list for the incantation.
+     */
+    void *player_list;
+    /**
      * @brief Is player participating to an incantation.
      */
-    bool in_incentation;
+    bool in_incantation;
     /**
      * @brief Is player dead.
      */
@@ -119,5 +127,24 @@ typedef struct {
      */
     zap_srv_actions_t actions[ZAP_SRV_MAX_ACTIONS];
 } zap_srv_player_t;
+
+/**
+ * @struct zap_srv_player_list_s
+ * @brief Linked list node for managing players in the Zappy server.
+ *
+ * This structure represents a single node in a singly linked list of players.
+ * Each node contains a pointer to a player structure and a pointer to the next
+ * node in the list.
+ */
+typedef struct zap_srv_player_list_s {
+    /**
+     * @brief Pointer to the player data associated with this node.
+     */
+    zap_srv_player_t *player;
+    /**
+     * @brief Pointer to the next node in the player list.
+     */
+    struct zap_srv_player_list_s *next;
+} zap_srv_player_list_t;
 
 #endif /* !ZAP_SRV_PLAYERS_H_ */

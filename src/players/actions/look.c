@@ -186,7 +186,7 @@ static void end_player_look(char **buf, zap_srv_socket_t *sock,
  * issuing the look command.
  * @param arguments Unused arguments for the function.
  */
-void player_look(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client,
+bool player_look(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client,
     UNUSED const char *arguments)
 {
     zap_srv_pos_t pos;
@@ -196,7 +196,7 @@ void player_look(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client,
 
     if (!buf) {
         send_client("ko", &client->sock);
-        return;
+        return false;
     }
     for (ssize_t i = 0; i <= client->level; ++i) {
         for (ssize_t j = -i; j <= i; ++j) {
@@ -208,4 +208,5 @@ void player_look(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client,
         }
     }
     end_player_look(&buf, &client->sock, positions);
+    return true;
 }

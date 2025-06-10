@@ -19,7 +19,7 @@
  * @param client Pointer to the player structure to be moved.
  * @param arguments Arguments for the function (unused).
  */
-void player_forward(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client,
+bool player_forward(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client,
     UNUSED const char *arguments)
 {
     zap_srv_pos_t map_size = (zap_srv_pos_t){ctxt->map.x, ctxt->map.y};
@@ -30,4 +30,5 @@ void player_forward(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client,
     client->pos.y = new_pos.y;
     send_client("ok\n", &client->sock);
     send_ppo(ctxt, client);
+    return true;
 }

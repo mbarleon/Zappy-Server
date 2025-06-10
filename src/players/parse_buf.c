@@ -30,7 +30,7 @@ static const char *authorized_strings[] = {
     "Eject",
     "Take ",
     "Set ",
-    "Inventory",
+    "Incantation",
     NULL
 };
 
@@ -71,6 +71,7 @@ static void add_action(zap_srv_player_t *player, const char *arg,
         if (player->actions[i].action != ZAP_SRV_PL_NONE) {
             continue;
         }
+        player->actions[i].count = 0;
         player->actions[i].action = action;
         player->actions[i].timestamp = current_time;
         if (arg && *arg) {

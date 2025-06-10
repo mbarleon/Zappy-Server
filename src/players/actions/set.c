@@ -44,13 +44,14 @@ static void add_elem_at(zap_srv_elements_list_t ***elements,
  * @param client Pointer to the player performing the action.
  * @param arguments String containing the name of the element to set.
  */
-void player_set(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client,
+bool player_set(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client,
     const char *arguments)
 {
     zap_srv_elements_t element = get_element_from_str(arguments);
 
     if (element == UNKNOWN_ELEMENT || client->inventory[element] <= 0) {
         send_client("ko\n", &client->sock);
+        return false;
     }
     client->inventory[element] -= 1;
     add_elem_at(ctxt->map.elements, &client->pos, element);
@@ -58,4 +59,5 @@ void player_set(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client,
     send_pdr(ctxt, client, element);
     send_pin(ctxt, client);
     send_bct(ctxt, &client->pos);
+    return true;
 }

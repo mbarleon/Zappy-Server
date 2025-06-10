@@ -26,7 +26,7 @@
  * @param client   Pointer to the player structure requesting the fork.
  * @param arguments Unused parameter for additional command arguments.
  */
-void player_fork(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client,
+bool player_fork(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client,
     UNUSED const char *arguments)
 {
     zap_srv_egg_t **egg_list = NULL;
@@ -39,10 +39,11 @@ void player_fork(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client,
     }
     if (!egg_list) {
         send_client("ko\n", &client->sock);
-        return;
+        return false;
     }
     add_egg(egg_list, &client->pos, client->id);
     send_client("ok\n", &client->sock);
     send_pfk(ctxt, client);
     send_enw(ctxt, *egg_list);
+    return true;
 }

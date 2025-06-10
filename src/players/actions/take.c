@@ -59,7 +59,7 @@ static int remove_element_at(zap_srv_elements_list_t ***elements,
  * @param client Pointer to the player performing the action.
  * @param arguments String representing the element the player wants to take.
  */
-void player_take(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client,
+bool player_take(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client,
     const char *arguments)
 {
     zap_srv_elements_t element = get_element_from_str(arguments);
@@ -71,7 +71,8 @@ void player_take(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client,
         send_pgt(ctxt, client, element);
         send_pin(ctxt, client);
         send_bct(ctxt, &client->pos);
-        return;
+        return true;
     }
     send_client("ko\n", &client->sock);
+    return false;
 }

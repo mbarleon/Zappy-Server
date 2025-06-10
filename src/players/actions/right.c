@@ -19,7 +19,7 @@
  * @param client Pointer to the player whose orientation will be updated.
  * @param arguments Unused arguments for the function.
  */
-void player_right(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client,
+bool player_right(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client,
     UNUSED const char *arguments)
 {
     switch (client->orientation) {
@@ -40,4 +40,5 @@ void player_right(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client,
     }
     send_client("ok\n", &client->sock);
     send_ppo(ctxt, client);
+    return true;
 }
