@@ -167,27 +167,68 @@ static void send_current_level(zap_srv_parsed_context_t *ctxt,
 }
 
 /**
- * @brief Consumes elements from the map at the player's current position.
+ * @brief Removes the first occurrence of a specified element from a linked
+ * list at a given position in a 2D array of element lists.
  *
- * This function iterates over the list of elements present at the player's
- * current (x, y) position on the map and counts the quantity of each element
- * type, storing the counts in the quantity_table array.
+ * This function searches for the first node containing the specified element
+ * in the linked list located at elements[pos->x][pos->y]. If found, it removes
+ * the node from the list, frees its memory, and returns ZAP_SRV_SUCCESS.
+ * If the element is not found, the function returns ZAP_SRV_ERROR.
  *
- * @param ctxt Pointer to the parsed server context containing the map and its
+ * @param elements A triple pointer to the 2D array of linked lists of
  * elements.
- * @param client Pointer to the player whose position is used to access the map
- * elements.
+ * @param pos Pointer to the position structure specifying the (x, y)
+ * coordinates.
+ * @param element The element to remove from the list.
+ * @return int ZAP_SRV_SUCCESS if the element was removed, ZAP_SRV_ERROR
+ * otherwise.
+ */
+static int remove_element_at(zap_srv_elements_list_t ***elements,
+    zap_srv_pos_t *pos, zap_srv_elements_t element)
+{
+    zap_srv_elements_list_t *prev = NULL;
+    zap_srv_elements_list_t *list = elements[pos->x][pos->y];
+
+    for (; list; list = list->next) {
+        if (list->element != element) {
+            prev = list;
+            continue;
+        }
+        if (!prev) {
+            elements[pos->x][pos->y] = list->next;
+        } else {
+            prev->next = list->next;
+        }
+        safe_free((void **)&list);
+        return ZAP_SRV_SUCCESS;
+    }
+    return ZAP_SRV_ERROR;
+}
+
+/**
+ * @brief Consumes the required elements from the map at the player's position
+ * for an incantation.
+ *
+ * This function iterates through the list of required elements for the
+ * player's current level (excluding food), and removes the specified quantity
+ * of each element from the map at the player's current position. After all
+ * required elements are consumed, it sends an updated block content message to
+ * notify clients of the change.
+ *
+ * @param ctxt Pointer to the parsed server context containing the map and
+ * other game state.
+ * @param client Pointer to the player performing the incantation.
  */
 static void consume_elements(zap_srv_parsed_context_t *ctxt,
     zap_srv_player_t *client)
 {
-    size_t quantity_table[ZAP_SRV_ELEMENTS_QUANTITY] = {0};
-
-    for (const zap_srv_elements_list_t *tmp =
-        ctxt->map.elements[client->pos.x][client->pos.y]; tmp;
-        tmp = tmp->next) {
-        quantity_table[tmp->element] += 1;
+    for (size_t i = 1; i < 7; ++i) {
+        for (size_t j = 0; j < requirements[client->level - 2][i]; ++j) {
+            remove_element_at(ctxt->map.elements, &client->pos,
+                (zap_srv_elements_t)i);
+        }
     }
+    send_bct(ctxt, &client->pos);
 }
 
 /**
