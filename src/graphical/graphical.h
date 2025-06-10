@@ -10,8 +10,8 @@
     #include "../players/players.h"
     #include "../parse_args/parse_args.h"
 
-void graphic_actions(zap_srv_player_t *client);
 void graphical_broadcast(zap_srv_parsed_context_t *ctxt, const char *str);
+void graphic_actions(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client);
 
 void send_bct(zap_srv_parsed_context_t *ctxt, zap_srv_pos_t *pos);
 void send_ebo(zap_srv_parsed_context_t *ctxt, zap_srv_egg_t *egg);

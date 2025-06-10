@@ -61,7 +61,7 @@ static void do_connected_action(zap_srv_parsed_context_t *ctxt,
 
     cmp = strcmp(client->team, "GRAPHIC");
     if (read && cmp == 0) {
-        graphic_actions(client);
+        graphic_actions(ctxt, client);
         return;
     }
     if (client->team != NULL && cmp != 0) {

@@ -18,6 +18,7 @@
 
     #define ZAP_SRV_MAX_ACTIONS 10
     #define ZAP_SRV_FOOD_TIME_UNITS 126
+    /* TODO: set this to the normal value of 1260 */
     #define ZAP_SRV_BASE_TIME_UNITS (1260 * 200000)
 
 /**
