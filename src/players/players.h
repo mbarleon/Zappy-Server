@@ -18,7 +18,7 @@
 
     #define ZAP_SRV_MAX_ACTIONS 10
     #define ZAP_SRV_FOOD_TIME_UNITS 126
-    #define ZAP_SRV_BASE_TIME_UNITS 1260
+    #define ZAP_SRV_BASE_TIME_UNITS (1260 * 200000)
 
 /**
  * @brief Structure representing an action performed by a player.

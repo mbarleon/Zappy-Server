@@ -25,6 +25,8 @@ void send_pdi(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client);
 void send_pnw(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client);
 void send_pie(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client,
     bool worked);
+void send_pbc(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client,
+    const char *msg);
 void send_pdr(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client,
     zap_srv_elements_t element);
 void send_pgt(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client,
