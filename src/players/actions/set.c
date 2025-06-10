@@ -55,5 +55,7 @@ void player_set(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client,
     client->inventory[element] -= 1;
     add_elem_at(ctxt->map.elements, &client->pos, element);
     send_client("ok\n", &client->sock);
+    send_pdr(ctxt, client, element);
     send_pin(ctxt, client);
+    send_bct(ctxt, &client->pos);
 }

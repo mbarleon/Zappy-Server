@@ -68,7 +68,9 @@ void player_take(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client,
         ZAP_SRV_SUCCESS) {
         client->inventory[element] += 1;
         send_client("ok\n", &client->sock);
+        send_pgt(ctxt, client, element);
         send_pin(ctxt, client);
+        send_bct(ctxt, &client->pos);
         return;
     }
     send_client("ko\n", &client->sock);
