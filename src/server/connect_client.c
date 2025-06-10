@@ -132,7 +132,7 @@ static size_t compute_slots_in_team(char *team, zap_srv_parsed_context_t *ctxt)
  * @param ctxt The server context containing the list of teams.
  */
 static zap_srv_pos_t decrease_team_slots(char *team,
-    zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client)
+    zap_srv_parsed_context_t *ctxt)
 {
     zap_srv_pos_t pos;
 
@@ -143,8 +143,6 @@ static zap_srv_pos_t decrease_team_slots(char *team,
         if (strcmp(team, tmp->name) == 0) {
             tmp->num_clients += 1;
             tmp->available_slots -= 1;
-            send_pnw(ctxt, client);
-            send_pin(ctxt, client);
             pos = hatch_egg(ctxt, team);
             return pos;
         }
@@ -198,9 +196,11 @@ static void send_player_connect_message(zap_srv_player_t *client,
 
     block = snprintf_alloc("%ld\n%ld %ld\n", slots_in_team - 1, ctxt->map.x,
         ctxt->map.y);
-    pos = decrease_team_slots(client->team, ctxt, client);
+    pos = decrease_team_slots(client->team, ctxt);
     client->pos.x = pos.x;
     client->pos.y = pos.y;
+    send_pnw(ctxt, client);
+    send_pin(ctxt, client);
     if (block) {
         send_client(block, &client->sock);
         free(block);

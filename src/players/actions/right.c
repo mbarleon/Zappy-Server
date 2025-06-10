@@ -15,12 +15,12 @@
  * NORTH -> EAST -> SOUTH -> WEST -> NORTH. After updating the orientation, it
  * sends an "ok" response to the client.
  *
- * @param ctxt Unused parsed context parameter.
+ * @param ctxt Parsed context parameter.
  * @param client Pointer to the player whose orientation will be updated.
  * @param arguments Unused arguments for the function.
  */
-void player_right(UNUSED zap_srv_parsed_context_t *ctxt,
-    zap_srv_player_t *client, UNUSED const char *arguments)
+void player_right(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client,
+    UNUSED const char *arguments)
 {
     switch (client->orientation) {
         case NORTH:
@@ -39,4 +39,5 @@ void player_right(UNUSED zap_srv_parsed_context_t *ctxt,
             break;
     }
     send_client("ok\n", &client->sock);
+    send_ppo(ctxt, client);
 }

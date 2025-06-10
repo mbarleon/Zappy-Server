@@ -29,4 +29,5 @@ void player_forward(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client,
     client->pos.x = new_pos.x;
     client->pos.y = new_pos.y;
     send_client("ok\n", &client->sock);
+    send_ppo(ctxt, client);
 }

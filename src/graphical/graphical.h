@@ -17,6 +17,7 @@ void send_bct(zap_srv_parsed_context_t *ctxt, zap_srv_pos_t *pos);
 void send_ebo(zap_srv_parsed_context_t *ctxt, zap_srv_egg_t *egg);
 void send_enw(zap_srv_parsed_context_t *ctxt, zap_srv_egg_t *egg);
 void send_seg(zap_srv_parsed_context_t *ctxt, zap_srv_team_t *team);
+void send_ppo(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client);
 void send_pin(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client);
 void send_pfk(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client);
 void send_pdi(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client);
