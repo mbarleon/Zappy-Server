@@ -57,6 +57,7 @@ void create_team(zap_srv_team_t **teams, const char *str, size_t max_clients)
     new_team->seg = false;
     new_team->name = safe_strdup(str);
     new_team->max_clients = max_clients;
+    new_team->max_elevation_players = 0;
     if (!*teams) {
         *teams = new_team;
         return;

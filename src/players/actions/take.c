@@ -52,9 +52,8 @@ static int remove_element_at(zap_srv_elements_list_t ***elements,
  *
  * This function attempts to remove the specified element from the map at the
  * player's current position. If successful, it updates the player's inventory
- * or time units (if the element is FOOD), and sends an "ok" response to the
- * client. If the element cannot be taken, it sends a "ko" response to the
- * client.
+ * and sends an "ok" response to the client. If the element cannot be taken,
+ * it sends a "ko" response to the client.
  *
  * @param ctxt Pointer to the server context containing map and game state.
  * @param client Pointer to the player performing the action.
@@ -67,12 +66,9 @@ void player_take(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client,
 
     if (remove_element_at(ctxt->map.elements, &client->pos, element) ==
         ZAP_SRV_SUCCESS) {
-        if (element == FOOD) {
-            client->time_units += ZAP_SRV_FOOD_TIME_UNITS;
-        } else {
-            client->inventory[element] += 1;
-        }
+        client->inventory[element] += 1;
         send_client("ok\n", &client->sock);
+        send_pin(ctxt, client);
         return;
     }
     send_client("ko\n", &client->sock);

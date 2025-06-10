@@ -103,6 +103,10 @@ static bool game_over(zap_srv_parsed_context_t *ctxt)
     zap_srv_team_t *winner2 = NULL;
 
     for (zap_srv_team_t *tmp = ctxt->teams; tmp; tmp = tmp->next) {
+        if (tmp->max_elevation_players >= ZAP_SRV_MAX_ELEVATION_WIN) {
+            winner = tmp;
+            break;
+        }
         if (tmp->available_slots > 0 || tmp->num_clients > 0) {
             winner2 = winner;
             winner = tmp;

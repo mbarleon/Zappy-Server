@@ -8,6 +8,87 @@
 #include "server_internal.h"
 
 /**
+ * @brief Sends detailed information about a player to a graphic client.
+ *
+ * This function formats and sends the following information about a player:
+ * - Player new (pnw): ID, position (x, y), orientation, level, team name.
+ * - Player inventory (pin): ID, position (x, y), and inventory counts for each
+ *   resource type.
+ * - Player level (plv): ID and level.
+ *
+ * The information is sent as formatted strings to the specified client socket.
+ *
+ * @param player Pointer to the player whose information will be sent.
+ * @param client Pointer to the client (graphic client) that will receive the
+ * information.
+ */
+static void send_player_infos(zap_srv_player_t *player,
+    zap_srv_player_t *client)
+{
+    char *block;
+
+    block = snprintf_alloc("pnw #%ld %ld %ld %d %ld %s\npin #%ld %ld %ld %ld "
+        "%ld %ld %ld %ld %ld %ld\nplv #%ld %ld\n", player->id, player->pos.x,
+        player->pos.y, player->orientation, player->level, player->team,
+        player->id, player->pos.x, player->pos.y, player->inventory[FOOD],
+        player->inventory[LINEMATE], player->inventory[DERAUMERE],
+        player->inventory[SIBUR], player->inventory[MENDIANE],
+        player->inventory[PHIRAS], player->inventory[THYSTAME], player->id,
+        player->level);
+    if (block) {
+        send_client(block, &client->sock);
+        free(block);
+    }
+}
+
+/**
+ * @brief Sends player information to a specific client for all non-graphic
+ * clients.
+ *
+ * Iterates through all connected clients on the server. For each client whose
+ * team is not "GRAPHIC", it sends their player information to the specified
+ * client.
+ *
+ * @param ctxt   Pointer to the parsed server context containing server and
+ * client data.
+ * @param client Pointer to the client to whom the player information will be
+ * sent.
+ */
+static void my_send_pnw(zap_srv_parsed_context_t *ctxt,
+    zap_srv_player_t *client)
+{
+    for (size_t i = 0; i < ctxt->server.num_clients; ++i) {
+        if (strcmp("GRAPHIC", ctxt->server.clients[i].team) != 0) {
+            send_player_infos(&(ctxt->server.clients[i]), client);
+        }
+    }
+}
+
+/**
+ * @brief Sends the server frequency to a graphic client in the "sgt" format.
+ *
+ * This function formats the server's frequency as a string using the "sgt"
+ * command, then sends it to the specified graphic client. The message is
+ * dynamically allocated and freed after sending.
+ *
+ * @param ctxt Pointer to the parsed server context containing server
+ * $information.
+ * @param client Pointer to the graphic client to which the frequency will be
+ * sent.
+ */
+static void my_send_sgt(zap_srv_parsed_context_t *ctxt,
+    zap_srv_player_t *client)
+{
+    char *block;
+
+    block = snprintf_alloc("sgt %ld\n", ctxt->server.frequency);
+    if (block) {
+        send_client(block, &client->sock);
+        free(block);
+    }
+}
+
+/**
  * @brief Sends an "enw" message to a graphic client with egg information.
  *
  * This function formats and sends a message containing information about an
@@ -141,6 +222,8 @@ void send_graphic_connect_message(zap_srv_player_t *client,
             my_send_bct(ctxt, client, i, j);
         }
     }
+    my_send_pnw(ctxt, client);
+    my_send_sgt(ctxt, client);
     my_send_tna(ctxt, client);
     my_send_enw(ctxt, client);
 }

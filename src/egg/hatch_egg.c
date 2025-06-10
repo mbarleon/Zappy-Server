@@ -86,6 +86,7 @@ zap_srv_pos_t hatch_egg(zap_srv_parsed_context_t *ctxt, const char *team)
         egg_index--;
         if (egg_index == 0) {
             remove_egg(&my_team->eggs, tmp);
+            send_ebo(ctxt, tmp);
             return tmp->pos;
         }
         if (!tmp->next) {

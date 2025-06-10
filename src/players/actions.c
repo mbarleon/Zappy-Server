@@ -139,18 +139,21 @@ static void decrease_team_count(zap_srv_parsed_context_t *ctxt,
 }
 
 /**
- * @brief Checks if a player is still alive based on their time units and the
- * server frequency.
+ * @brief Checks if a player is alive based on their time units and food
+ * inventory.
  *
- * This function determines whether the specified player (`client`) has
- * exceeded their allowed lifetime by comparing the current time with the
- * calculated real time of death. If the player is dead, it sends a "dead"
- * message to the client, decreases the team's player count, and disconnects
- * the client from the server.
+ * This function determines whether the specified player (`client`) should be
+ * marked as dead by comparing the current time with the player's allowed
+ * lifetime, which is calculated using their birth time and time units. If the
+ * player is dead and has no food left, it sends a "dead" message to the
+ * client, notifies the server, decreases the team's player count, and
+ * disconnects the client. If the player is dead but still has food, it
+ * consumes one unit of food, extends the player's lifetime, marks them as
+ * alive, and notifies the server of the inventory change.
  *
- * @param ctxt Pointer to the parsed server context containing server and
- * client information.
- * @param client Pointer to the player structure to check for alive status.
+ * @param ctxt   Pointer to the parsed server context.
+ * @param client Pointer to the player structure to check.
+ * @param i      Index of the client in the server's player list.
  */
 static void check_alive(zap_srv_parsed_context_t *ctxt,
     zap_srv_player_t *client, size_t i)
@@ -159,15 +162,21 @@ static void check_alive(zap_srv_parsed_context_t *ctxt,
     double real_time = client->birth_time +
         (client->time_units / (double)ctxt->server.frequency);
 
-    if (client->dead) {
+    if (client->dead)
         return;
-    }
     client->dead = current_time >= real_time;
     if (client->dead) {
-        send_client("dead\n", &client->sock);
-        send_pdi(ctxt, client);
-        decrease_team_count(ctxt, client->team);
-        disconnect_client(&ctxt->server, i);
+        if (client->inventory[FOOD] <= 0) {
+            send_client("dead\n", &client->sock);
+            send_pdi(ctxt, client);
+            decrease_team_count(ctxt, client->team);
+            disconnect_client(&ctxt->server, i);
+            return;
+        }
+        client->inventory[FOOD] -= 1;
+        client->time_units += ZAP_SRV_FOOD_TIME_UNITS;
+        client->dead = false;
+        send_pin(ctxt, client);
     }
 }
 

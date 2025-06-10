@@ -14,6 +14,7 @@
     #include "egg_functions.h"
     #include "../utils/utils.h"
     #include <cextend/memory.h>
+    #include "../graphical/graphical.h"
 
     #define ZAP_SRV_EGG_MAX 256
 

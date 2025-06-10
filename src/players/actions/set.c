@@ -36,10 +36,9 @@ static void add_elem_at(zap_srv_elements_list_t ***elements,
  *
  * This function parses the element to be set from the given arguments, checks
  * if the player has at least one of the specified element (and that the
- * element is valid and not FOOD), and if so, removes one from the player's
- * inventory and adds it to the map at the player's position. It sends "ok\n"
- * to the client on success, or "ko\n" if the action is invalid or not
- * possible.
+ * element is valid), and if so, removes one from the player's inventory and
+ * adds it to the map at the player's position. It sends "ok\n" to the client
+ * on success, or "ko\n" if the action is invalid or not possible.
  *
  * @param ctxt Pointer to the server context containing map and game state.
  * @param client Pointer to the player performing the action.
@@ -50,11 +49,11 @@ void player_set(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client,
 {
     zap_srv_elements_t element = get_element_from_str(arguments);
 
-    if (element == UNKNOWN_ELEMENT || element == FOOD ||
-        client->inventory[element] <= 0) {
+    if (element == UNKNOWN_ELEMENT || client->inventory[element] <= 0) {
         send_client("ko\n", &client->sock);
     }
     client->inventory[element] -= 1;
     add_elem_at(ctxt->map.elements, &client->pos, element);
     send_client("ok\n", &client->sock);
+    send_pin(ctxt, client);
 }

@@ -13,8 +13,10 @@
 void graphic_actions(zap_srv_player_t *client);
 void graphical_broadcast(zap_srv_parsed_context_t *ctxt, const char *str);
 
+void send_ebo(zap_srv_parsed_context_t *ctxt, zap_srv_egg_t *egg);
 void send_enw(zap_srv_parsed_context_t *ctxt, zap_srv_egg_t *egg);
 void send_seg(zap_srv_parsed_context_t *ctxt, zap_srv_team_t *team);
+void send_pin(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client);
 void send_pfk(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client);
 void send_pdi(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client);
 void send_pnw(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client);

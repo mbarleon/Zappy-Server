@@ -41,6 +41,10 @@ typedef struct zap_srv_team_s {
      */
     size_t max_clients;
     /**
+     * @brief Number of players with max elevation level.
+     */
+    size_t max_elevation_players;
+    /**
      * @brief eggs of the team.
      */
     zap_srv_egg_t *eggs;
