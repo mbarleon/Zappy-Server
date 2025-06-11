@@ -30,7 +30,10 @@ zap_srv_flags_t handle_x_flag(const char **av, zap_srv_parsed_context_t *ctxt,
 {
     size_t x = get_size_t_from_str(av[(*i) + 1]);
 
-    ctxt->map.x = x;
+    if (x > SSIZE_MAX || x < 10) {
+        THROW(CEXTEND_EXCEPTION_INVALID_ARGUMENT);
+    }
+    ctxt->map.x = (ssize_t)x;
     *i += 2;
     return ZAP_SRV_FLAG_X;
 }

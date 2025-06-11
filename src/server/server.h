@@ -7,25 +7,11 @@
 
 #ifndef ZAP_SRV_SERVER_H_
     #define ZAP_SRV_SERVER_H_
-    #include <stdint.h>
+    #include "zap_srv_t.h"
+    #include "../parse_args/parse_args.h"
 
-/**
- * @struct zap_srv_t
- * @brief Structure representing the configuration of a Zappy server.
- *
- * This structure holds the basic configuration parameters for the server,
- * including the network port and the server's frequency.
- */
-typedef struct {
-    /**
-     * @brief The network port number on which the server listens
-     * (16-bit unsigned integer).
-     */
-    uint16_t port;
-    /**
-     * @brief The frequency at which the server operates (size_t).
-     */
-    size_t frequency;
-} zap_srv_t;
+void run_server(zap_srv_parsed_context_t *ctxt);
+void send_client(const char *buffer, zap_srv_socket_t *client);
+void disconnect_client(zap_srv_t *server, size_t i);
 
 #endif /* !ZAP_SRV_SERVER_H_ */

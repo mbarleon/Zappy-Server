@@ -10,8 +10,10 @@
     #include <errno.h>
     #include <string.h>
     #include <stdlib.h>
+    #include <limits.h>
     #include <stdint.h>
     #include <stdbool.h>
+    #include <sys/types.h>
     #include "parse_args.h"
     #include <cextend/macro.h>
     #include <cextend/exception.h>

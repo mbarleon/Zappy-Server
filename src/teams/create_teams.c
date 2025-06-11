@@ -8,6 +8,25 @@
 #include "teams_internal.h"
 
 /**
+ * @brief Checks if a string contains only valid characters.
+ *
+ * This function iterates through the given string and verifies that each
+ * character is valid.
+ *
+ * @param str The input string to validate.
+ * @return true if all characters in the string are valid; false otherwise.
+ */
+static bool is_valid_characters(const char *str)
+{
+    for (size_t i = 0; str[i]; ++i) {
+        if (!is_valid_char(str[i])) {
+            return false;
+        }
+    }
+    return true;
+}
+
+/**
  * @brief Creates a new team and adds it to the linked list of teams.
  *
  * This function allocates and initializes a new zap_srv_team_t structure with
@@ -31,14 +50,14 @@ void create_team(zap_srv_team_t **teams, const char *str, size_t max_clients)
     zap_srv_team_t *tmp;
     zap_srv_team_t *new_team;
 
-    if (!teams || strcmp(str, "GRAPHIC") == 0) {
+    if (!teams || strcmp(str, "GRAPHIC") == 0 || !is_valid_characters(str)) {
         THROW(CEXTEND_EXCEPTION_INVALID_ARGUMENT);
     }
-    new_team = safe_malloc(sizeof(zap_srv_team_t), NULL);
-    new_team->next = NULL;
-    new_team->num_clients = 0;
+    new_team = safe_calloc(1, sizeof(zap_srv_team_t), NULL);
+    new_team->seg = false;
     new_team->name = safe_strdup(str);
     new_team->max_clients = max_clients;
+    new_team->max_elevation_players = 0;
     if (!*teams) {
         *teams = new_team;
         return;

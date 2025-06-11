@@ -19,6 +19,8 @@
      * @var CEXTEND_MIN_ENTRY
      *      The minimum entry value for constructor priorities
      *      (starting at 101).
+     * @var ZAP_SRV_INIT_SIGINT_ENTRY
+     *      Priority for initializing sigint handler.
      * @var ZAP_SRV_INIT_RAND_ENTRY
      *      Priority for initializing the random number generator for the
      *      Zappy server.
@@ -30,9 +32,15 @@
 
 typedef enum {
     CEXTEND_MIN_ENTRY = 101,
+    ZAP_SRV_INIT_SIGNALS_ENTRY,
     ZAP_SRV_INIT_RAND_ENTRY,
     CEXTEND_INIT_LOG_ENTRY,
     CEXTEND_INIT_MEMORY_ENTRY
 } cextend_constructor_priotiries_t;
+
+void initialize_log_entry(void);
+void initialize_memory_entry(void);
+void initialize_srand_entry(void);
+void init_signals_handler(void);
 
 #endif /* !CEXTEND_ENTRIES_H_ */

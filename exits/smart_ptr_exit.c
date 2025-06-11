@@ -20,7 +20,7 @@
  *       the priority or group for the destructor execution.
  */
 __attribute__((destructor(CEXTEND_FREE_MEM_EXIT)))
-static void free_mem_exit(void)
+void free_mem_exit(void)
 {
     free_ptr_list();
 }

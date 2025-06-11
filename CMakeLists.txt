@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(zappy-server VERSION 1.0)
+project(zappy_server VERSION 1.0)
 
 set(CMAKE_C_STANDARD 17)
 set(CMAKE_C_STANDARD_REQUIRED ON)
@@ -22,32 +22,20 @@ endif()
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 ########################################
-# NOTE: zappy-server configuration
+# NOTE: zappy_server configuration
 ########################################
 add_subdirectory(external/lib-cextend EXCLUDE_FROM_ALL)
 
 ########################################
 
-file(GLOB MAIN_SOURCE CONFIGURE_DEPENDS
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/main.c")
+file(GLOB_RECURSE MAIN_SOURCE CONFIGURE_DEPENDS
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.c")
 
 file(GLOB ENTRIES_SOURCE CONFIGURE_DEPENDS
     "${CMAKE_CURRENT_SOURCE_DIR}/entries/*.c")
 
 file(GLOB EXITS_SOURCE CONFIGURE_DEPENDS
     "${CMAKE_CURRENT_SOURCE_DIR}/exits/*.c")
-
-file(GLOB MAP_SOURCE CONFIGURE_DEPENDS
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/map/*.c")
-
-file(GLOB PARSE_ARGS_SOURCE CONFIGURE_DEPENDS
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/parse_args/*.c")
-
-file(GLOB SERVER_SOURCE CONFIGURE_DEPENDS
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/server/*.c")
-
-file(GLOB TEAMS_SOURCE CONFIGURE_DEPENDS
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/teams/*.c")
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang|AppleClang")
     set(MY_RPATH "@loader_path/libs")
@@ -58,17 +46,13 @@ endif()
 set(CMAKE_INSTALL_RPATH "${MY_RPATH}")
 set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
 
-add_executable(zappy-server
+add_executable(zappy_server
     ${MAIN_SOURCE}
     ${EXITS_SOURCE}
     ${ENTRIES_SOURCE}
-    ${MAP_SOURCE}
-    ${PARSE_ARGS_SOURCE}
-    ${SERVER_SOURCE}
-    ${TEAMS_SOURCE}
 )
 
-target_compile_options(zappy-server PRIVATE
+target_compile_options(zappy_server PRIVATE
     # INFO: classic warnings
     -Wall
     -Wextra
@@ -103,17 +87,18 @@ target_compile_options(zappy-server PRIVATE
 
     # INFO: disabling this because this causes a compilation error
     -Wno-gnu-zero-variadic-macro-arguments
+    -Wno-format-security
 )
 
-target_link_libraries(zappy-server PRIVATE cextend)
+target_link_libraries(zappy_server PRIVATE cextend m)
 
-target_include_directories(zappy-server PRIVATE
+target_include_directories(zappy_server PRIVATE
     $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
     $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/external/lib-cextend/include>
 )
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    target_compile_options(zappy-server PRIVATE -Wno-format-truncation)
+    target_compile_options(zappy_server PRIVATE -Wno-format-truncation)
 endif()
 
 ########################################
@@ -121,7 +106,7 @@ endif()
 option(ZAP_SRV_ENABLE_DEBUG "Enable debug definition" OFF)
 
 if(ZAP_SRV_ENABLE_DEBUG)
-    target_compile_definitions(zappy-server PRIVATE CEXTEND_DEBUG=1)
+    target_compile_definitions(zappy_server PRIVATE CEXTEND_DEBUG=1)
 endif()
 
 ########################################
@@ -134,10 +119,6 @@ add_executable(zap_srv_unit_tests
     ${MAIN_SOURCE}
     ${EXITS_SOURCE}
     ${ENTRIES_SOURCE}
-    ${MAP_SOURCE}
-    ${PARSE_ARGS_SOURCE}
-    ${SERVER_SOURCE}
-    ${TEAMS_SOURCE}
 )
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|AppleClang")
@@ -150,7 +131,7 @@ endif()
 
 target_compile_definitions(zap_srv_unit_tests PRIVATE UNIT_TESTS=1)
 
-target_link_libraries(zap_srv_unit_tests PRIVATE criterion sfml-graphics sfml-system sfml-window, cextend)
+target_link_libraries(zap_srv_unit_tests PRIVATE criterion cextend m)
 
 target_include_directories(zap_srv_unit_tests PRIVATE
     $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>

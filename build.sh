@@ -35,11 +35,11 @@ function _all()
     cd build || _error "mkdir failed"
     cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
     # INFO: Epitech's moulinette does: `cmake --build .` but this is slow as fuc
-    if make -j"$(nproc)" zappy-server; then
-        _success "compiled zappy-server"
+    if make -j"$(nproc)" zappy_server; then
+        _success "compiled zappy_server"
         exit 0
     fi
-    _error "compilation error" "failed to compile zappy-server"
+    _error "compilation error" "failed to compile zappy_server"
 }
 
 function _debug()
@@ -55,11 +55,11 @@ function _debug()
     cd build || _error "mkdir failed"
     cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug -DZAP_SRV_ENABLE_DEBUG=ON
     # INFO: Epitech's moulinette does: `cmake --build .` but this is slow as fuc
-    if make -j"$(nproc)" zappy-server; then
-        _success "compiled zappy-server"
+    if make -j"$(nproc)" zappy_server; then
+        _success "compiled zappy_server"
         exit 0
     fi
-    _error "compilation error" "failed to compile zappy-server"
+    _error "compilation error" "failed to compile zappy_server"
 }
 
 function _tests_run()
@@ -97,7 +97,7 @@ function _clean()
 function _fclean()
 {
     _clean
-    rm -rf zappy-server unit_tests plugins code_coverage.txt unit_tests-*.profraw unit_tests.profdata vgcore* cmake-build-debug libs/*
+    rm -rf zappy_server unit_tests plugins code_coverage.txt unit_tests-*.profraw unit_tests.profdata vgcore* cmake-build-debug libs/*
     external/lib-cextend/build.sh -f
 }
 
@@ -107,7 +107,7 @@ do
         -h|--help)
             cat << EOF
 USAGE:
-      $0    builds zappy-server project
+      $0    builds zappy_server project
 
 ARGUMENTS:
       $0 [-h|--help]    displays this message

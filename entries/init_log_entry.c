@@ -20,7 +20,7 @@
  * for the constructor attribute, which may be defined elsewhere.
  */
 __attribute__((constructor(CEXTEND_INIT_LOG_ENTRY)))
-static void initialize_log_entry(void)
+void initialize_log_entry(void)
 {
     CEXTEND_INIT_LOG;
 }

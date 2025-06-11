@@ -8,6 +8,8 @@
 #ifndef ZAP_SRV_TEAM_H_
     #define ZAP_SRV_TEAM_H_
     #include <stddef.h>
+    #include <stdbool.h>
+    #include "../egg/egg.h"
 
 /**
  * @struct zap_srv_team_s
@@ -19,6 +21,10 @@
  */
 typedef struct zap_srv_team_s {
     /**
+     * @brief Is team dead.
+     */
+    bool seg;
+    /**
      * @brief The name of the team.
      */
     const char *name;
@@ -27,9 +33,21 @@ typedef struct zap_srv_team_s {
      */
     size_t num_clients;
     /**
+     * @brief Available slots for the team.
+     */
+    size_t available_slots;
+    /**
      * @brief The maximum number of clients allowed in the team.
      */
     size_t max_clients;
+    /**
+     * @brief Number of players with max elevation level.
+     */
+    size_t max_elevation_players;
+    /**
+     * @brief eggs of the team.
+     */
+    zap_srv_egg_t *eggs;
     /**
      * @brief Pointer to the next team in the linked list.
      */
