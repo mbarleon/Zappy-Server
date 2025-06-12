@@ -23,8 +23,15 @@
  */
 static int create_socket(zap_srv_socket_t *sock)
 {
+    const int opt = 1;
+
     sock->fd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (sock->fd == -1) {
+        return ZAP_SRV_ERROR;
+    }
+    if (setsockopt(sock->fd, SOL_SOCKET, SO_REUSEADDR, &opt,
+        sizeof(opt)) == -1) {
+        close(sock->fd);
         return ZAP_SRV_ERROR;
     }
     return ZAP_SRV_SUCCESS;

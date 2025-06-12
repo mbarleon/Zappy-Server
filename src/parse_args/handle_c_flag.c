@@ -30,6 +30,9 @@ zap_srv_flags_t handle_c_flag(const char **av, zap_srv_parsed_context_t *ctxt,
 {
     size_t max_clients = get_size_t_from_str(av[(*i) + 1]);
 
+    if (max_clients == 0) {
+        THROW(CEXTEND_EXCEPTION_INVALID_ARGUMENT);
+    }
     ctxt->max_clients_per_team = max_clients;
     for (zap_srv_team_t *tmp = ctxt->teams; tmp; tmp = tmp->next) {
         tmp->max_clients = max_clients;
