@@ -81,7 +81,7 @@ static void my_send_sgt(zap_srv_parsed_context_t *ctxt,
 {
     char *block;
 
-    block = snprintf_alloc("sgt %ld\n", ctxt->server.frequency);
+    block = snprintf_alloc("sgt %ld\n", ctxt->server.frequency / 100UL);
     if (block) {
         send_client(block, &client->sock);
         free(block);
