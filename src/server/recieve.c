@@ -131,13 +131,11 @@ static void try_do_action(zap_srv_parsed_context_t *ctxt,
         CEXTEND_LOG(CEXTEND_LOG_ERROR, fetch_string(ZAP_SRV_CAUGHT_ERROR),
             "client handling", get_exception_str(code));
         disconnect_client(&ctxt->server, i);
-    } CATCH(code, CEXTEND_EXCEPTION_INVALID_ARGUMENT) {
+    } CATCH(code, CEXTEND_EXCEPTION_LOGIC_ERROR) {
         CEXTEND_LOG(CEXTEND_LOG_ERROR, fetch_string(ZAP_SRV_CAUGHT_ERROR),
             "client handling", get_exception_str(code));
         disconnect_client(&ctxt->server, i);
-    } CATCH(code, CEXTEND_EXCEPTION_LENGTH_ERROR) {
-        CEXTEND_LOG(CEXTEND_LOG_ERROR, fetch_string(ZAP_SRV_CAUGHT_ERROR),
-            "client handling", get_exception_str(code));
+    } CATCH(code, CEXTEND_EXCEPTION_SYSTEM_ERROR) {
         disconnect_client(&ctxt->server, i);
     } CATCH_END(code);
     END_TRY;

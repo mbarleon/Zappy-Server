@@ -199,13 +199,13 @@ static void send_player_connect_message(zap_srv_player_t *client,
     pos = decrease_team_slots(client->team, ctxt);
     client->pos.x = pos.x;
     client->pos.y = pos.y;
+    client->id = get_index();
     send_pnw(ctxt, client);
     send_pin(ctxt, client);
     if (block) {
         send_client(block, &client->sock);
         free(block);
     }
-    client->id = get_index();
     client->birth_time = get_time();
     client->in_incantation = false;
     client->player_list = NULL;

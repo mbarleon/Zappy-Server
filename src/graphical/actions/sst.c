@@ -24,8 +24,8 @@ void graph_sst(zap_srv_parsed_context_t *ctxt, UNUSED zap_srv_player_t *client,
 {
     char *block;
 
-    ctxt->server.frequency = args->size_a;
-    block = snprintf_alloc("sst %ld\n", ctxt->server.frequency);
+    ctxt->server.frequency = args->size_a * 100UL;
+    block = snprintf_alloc("sst %ld\n", args->size_a);
     if (block) {
         graphical_broadcast(ctxt, block);
         free(block);

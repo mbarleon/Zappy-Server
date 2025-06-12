@@ -14,6 +14,7 @@
     #include <stdbool.h>
     #include <cextend/memory.h>
     #include "../server/server.h"
+    #include <cextend/exception.h>
     #include "../graphical/graphical.h"
     #include "../parse_args/parse_args.h"
 
