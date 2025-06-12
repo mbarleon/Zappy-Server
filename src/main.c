@@ -16,19 +16,6 @@
 #include "string/string_entry_table.h"
 
 /**
- * @brief Prints the usage information for the zappy_server program.
- *
- * This function outputs the correct command-line usage format for the
- * zappy_server executable, detailing the required and optional arguments.
- * It is typically called when the user provides incorrect arguments or
- * requests help.
- */
-static void print_helper(void)
-{
-    printf(fetch_string(ZAP_SRV_USAGE));
-}
-
-/**
  * @brief Attempts to parse command-line arguments and handle exceptions.
  *
  * This function wraps the call to `parse_args` in a try-catch block to handle
@@ -114,9 +101,14 @@ int main(int ac, const char **av)
 {
     zap_srv_parsed_context_t ctxt;
 
+    if (ac == 1) {
+        printf(fetch_string(ZAP_SRV_USAGE));
+        return ZAP_SRV_ERROR;
+    }
     for (int i = 1; i < ac; ++i) {
-        if (strcmp(av[i], "-help") == 0) {
-            print_helper();
+        if (strcmp(av[i], "-help") == 0 || strcmp(av[i], "-h") == 0 ||
+            strcmp(av[i], "--help") == 0) {
+            printf(fetch_string(ZAP_SRV_USAGE));
             return ZAP_SRV_SUCCESS;
         }
     }

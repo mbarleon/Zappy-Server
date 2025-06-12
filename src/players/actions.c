@@ -173,7 +173,7 @@ static void decrease_team_count(zap_srv_parsed_context_t *ctxt,
  * @param i      Index of the client in the server's player list.
  */
 static void check_alive(zap_srv_parsed_context_t *ctxt,
-    zap_srv_player_t *client, size_t i)
+    zap_srv_player_t *client, UNUSED size_t i)
 {
     double current_time = get_time();
     double real_time = client->birth_time +
@@ -187,8 +187,7 @@ static void check_alive(zap_srv_parsed_context_t *ctxt,
             send_client("dead\n", &client->sock);
             send_pdi(ctxt, client);
             decrease_team_count(ctxt, client->team);
-            disconnect_client(&ctxt->server, i);
-            return;
+            THROW(CEXTEND_EXCEPTION_SYSTEM_ERROR);
         }
         client->inventory[FOOD] -= 1;
         client->time_units += ZAP_SRV_FOOD_TIME_UNITS;

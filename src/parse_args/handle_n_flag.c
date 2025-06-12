@@ -43,7 +43,7 @@ static bool is_a_flag(const char *str)
 zap_srv_flags_t handle_n_flag(const char **av, zap_srv_parsed_context_t *ctxt,
     int *i)
 {
-    while (!is_a_flag(av[(*i + 1)]) && av[(*i + 1)]) {
+    while (av[(*i + 1)] && !is_a_flag(av[(*i + 1)])) {
         create_team(&ctxt->teams, av[(*i + 1)], ctxt->max_clients_per_team);
         *i += 1;
     }
