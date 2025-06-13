@@ -28,6 +28,25 @@ void handle_client_disconnect(zap_srv_socket_t *client)
 }
 
 /**
+ * @brief Resets the file descriptor settings for the last client in the
+ * server's fds array.
+ *
+ * This function sets the file descriptor at the index corresponding to the
+ * current number of clients (`num_clients`) to -1, indicating that it is
+ * unused. It also sets the `events` field to `POLLIN` to listen for input
+ * events, and resets the `revents` field to 0.
+ *
+ * @param server Pointer to the zap_srv_t server structure containing the fds
+ * array and client count.
+ */
+static void reset_fds(zap_srv_t *server)
+{
+    server->fds[server->num_clients].fd = -1;
+    server->fds[server->num_clients].events = POLLIN;
+    server->fds[server->num_clients].revents = 0;
+}
+
+/**
  * @brief Disconnects a client from the server and cleans up associated
  * resources.
  *
@@ -63,7 +82,6 @@ void disconnect_client(zap_srv_t *server, size_t i)
     memset(&server->clients[server->num_clients - 1], 0,
         sizeof(zap_srv_player_t));
     server->clients[server->num_clients - 1].sock.fd = ZAP_SRV_SOCK_ERROR;
-    server->fds[server->num_clients].fd = -1;
-    server->fds[server->num_clients].events = POLLIN;
+    reset_fds(server);
     server->num_clients -= 1;
 }
