@@ -24,6 +24,10 @@ void graph_sst(zap_srv_parsed_context_t *ctxt, UNUSED zap_srv_player_t *client,
 {
     char *block;
 
+    if (args->size_a == 0) {
+        send_client("sbp\n", &client->sock);
+        return;
+    }
     ctxt->server.frequency = args->size_a * 100UL;
     block = snprintf_alloc("sst %ld\n", args->size_a);
     if (block) {
