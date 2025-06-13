@@ -177,7 +177,7 @@ static void check_alive(zap_srv_parsed_context_t *ctxt,
 {
     double current_time = get_time();
     double real_time = client->birth_time +
-        (client->time_units / (double)ctxt->server.frequency);
+        (client->time_units * 100UL / (double)ctxt->server.frequency);
 
     if (client->dead)
         return;

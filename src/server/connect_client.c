@@ -199,6 +199,7 @@ static void send_player_connect_message(zap_srv_player_t *client,
     pos = decrease_team_slots(client->team, ctxt);
     client->pos.x = pos.x;
     client->pos.y = pos.y;
+    client->inventory[FOOD] = ZAP_SRV_BASE_FOOD;
     client->id = get_index();
     send_pnw(ctxt, client);
     send_pin(ctxt, client);
