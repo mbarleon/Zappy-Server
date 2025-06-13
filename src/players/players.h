@@ -16,9 +16,9 @@
     #include "../elements/elements.h"
     #include "../server/zap_srv_socket.h"
 
+    #define ZAP_SRV_BASE_FOOD 9
     #define ZAP_SRV_MAX_ACTIONS 10
     #define ZAP_SRV_FOOD_TIME_UNITS 126
-    #define ZAP_SRV_BASE_TIME_UNITS 1260
 
 /**
  * @brief Structure representing an action performed by a player.
