@@ -5,7 +5,7 @@
 ** handle_sigint
 */
 
-#include "server_internal.h"
+#include "signals_handling.h"
 
 /**
  * @brief Controls and queries the running state of the server.

@@ -75,12 +75,13 @@ float *compute_density(const zap_srv_map_t *map)
     if (!map->elements) {
         return table;
     }
-    for (ssize_t i = 0; i < map->x; ++i) {
-        for (ssize_t j = 0; j < map->y; ++j) {
+    for (ssize_t i = 0; i < map->x && keep_running(false); ++i) {
+        for (ssize_t j = 0; j < map->y && keep_running(false); ++j) {
             count_element_types(map->elements[i][j], table);
         }
     }
-    for (size_t i = 0; i < ZAP_SRV_ELEMENTS_QUANTITY; ++i) {
+    for (size_t i = 0; i < ZAP_SRV_ELEMENTS_QUANTITY && keep_running(false);
+        ++i) {
         table[i] /= (float)map_size;
     }
     return table;

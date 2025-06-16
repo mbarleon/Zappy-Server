@@ -15,6 +15,7 @@
     #include "../utils/utils.h"
     #include <cextend/memory.h>
     #include "../graphical/graphical.h"
+    #include "../server/signals_handling.h"
 
     #define ZAP_SRV_EGG_MAX 256
 

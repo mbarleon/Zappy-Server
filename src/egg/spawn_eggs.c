@@ -40,7 +40,8 @@ static size_t compute_target_eggs_per_team(
     const ssize_t map_size = ctxt->map.x * ctxt->map.y;
     size_t nteams = 0;
 
-    for (zap_srv_team_t *tmp = ctxt->teams; tmp; tmp = tmp->next) {
+    for (zap_srv_team_t *tmp = ctxt->teams; tmp && keep_running(false);
+        tmp = tmp->next) {
         nteams++;
     }
     return my_min((size_t)floor((double)map_size / (double)nteams),
@@ -66,9 +67,14 @@ void spawn_eggs(zap_srv_parsed_context_t *ctxt)
     zap_srv_pos_t *positions =
         generate_shuffled_positions(ctxt->map.x, ctxt->map.y);
 
-    for (zap_srv_team_t *tmp = ctxt->teams; tmp; tmp = tmp->next) {
+    if (!positions) {
+        return;
+    }
+    for (zap_srv_team_t *tmp = ctxt->teams; tmp && keep_running(false);
+        tmp = tmp->next) {
         tmp->available_slots = eggs_per_team;
-        for (size_t i = 0; i < eggs_per_team; ++i) {
+        for (size_t i = 0; i < eggs_per_team && keep_running(false);
+            ++i) {
             add_egg(&tmp->eggs, &positions[pos_idx], -1);
             pos_idx++;
         }

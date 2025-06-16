@@ -11,6 +11,7 @@
     #include <stdlib.h>
     #include <stddef.h>
     #include <stdbool.h>
+    #include "../server/signals_handling.h"
 
 bool is_valid_char(char c);
 zap_srv_pos_t *generate_shuffled_positions(ssize_t x, ssize_t y);

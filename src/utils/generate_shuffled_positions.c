@@ -30,12 +30,12 @@ zap_srv_pos_t *generate_shuffled_positions(ssize_t x, ssize_t y)
 
     if (!positions)
         return NULL;
-    for (ssize_t i = 0; i < x; ++i)
-        for (ssize_t j = 0; j < y; ++j) {
+    for (ssize_t i = 0; i < x && keep_running(false); ++i)
+        for (ssize_t j = 0; j < y && keep_running(false); ++j) {
             positions[idx] = (zap_srv_pos_t){i, j};
             idx++;
         }
-    for (ssize_t i = m_size - 1; i > 0; --i) {
+    for (ssize_t i = m_size - 1; i > 0 && keep_running(false); --i) {
         offset = (size_t)((size_t)rand() % ((size_t)i + 1));
         tmp = positions[i];
         positions[i] = positions[offset];

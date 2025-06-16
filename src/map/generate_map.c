@@ -57,15 +57,15 @@ static void compute_element_targets(size_t *element_targets,
     size_t target;
     size_t cur;
 
-    for (size_t i = 0; i < ZAP_SRV_ELEMENTS_QUANTITY; ++i) {
+    for (size_t i = 0; i < ZAP_SRV_ELEMENTS_QUANTITY && keep_running(false);
+        ++i) {
         density = 0.0F;
         for (size_t j = 0; j < ZAP_SRV_ELEMENTS_QUANTITY &&
-            !set_density(i, j, &density); ++j);
+            !set_density(i, j, &density) && keep_running(false); ++j);
         target = (size_t)(density * (float)map_size + 0.5F);
         cur = (size_t)(current_density[i] * (float)map_size + 0.5F);
         element_targets[i] = (target > cur) ? (target - cur) : 0;
     }
-    free(current_density);
 }
 
 /**
@@ -143,14 +143,15 @@ static bool try_place_elem(zap_srv_map_t *map, zap_srv_pos_t *positions,
 static void place_elements_on_map(zap_srv_map_t *map, zap_srv_pos_t *positions,
     size_t *element_targets, ssize_t map_size)
 {
-    size_t placed[ZAP_SRV_ELEMENTS_QUANTITY] = {0};
-    size_t total_to_place = 0;
-    size_t pos_idx = 0;
     size_t elem = 0;
+    size_t pos_idx = 0;
+    size_t total_to_place = 0;
+    size_t placed[ZAP_SRV_ELEMENTS_QUANTITY] = {0};
 
-    for (size_t i = 0; i < ZAP_SRV_ELEMENTS_QUANTITY; ++i)
+    for (size_t i = 0; i < ZAP_SRV_ELEMENTS_QUANTITY && keep_running(false);
+        ++i)
         total_to_place += element_targets[i];
-    while (total_to_place > 0) {
+    while (total_to_place > 0 && keep_running(false)) {
         if (placed[elem] < element_targets[elem]) {
             try_place_elem(map, positions, elem, pos_idx);
             placed[elem]++;
@@ -159,7 +160,6 @@ static void place_elements_on_map(zap_srv_map_t *map, zap_srv_pos_t *positions,
         }
         elem = (elem + 1) % ZAP_SRV_ELEMENTS_QUANTITY;
     }
-    free(positions);
 }
 
 /**
@@ -184,6 +184,43 @@ static void init_map(zap_srv_map_t *map)
 }
 
 /**
+ * @brief Frees the memory allocated for a 2D density array.
+ *
+ * This function checks if the provided pointer to the density array is valid,
+ * and if so, frees the allocated memory and sets the pointer to NULL to avoid
+ * dangling pointers.
+ *
+ * @param density A pointer to the 2D float array to be freed.
+ */
+static void free_density(float **density)
+{
+    if (!density || !*density) {
+        return;
+    }
+    free(*density);
+    *density = NULL;
+}
+
+/**
+ * @brief Frees the memory allocated for a zap_srv_pos_t pointer array and sets
+ * it to NULL.
+ *
+ * This function checks if the given double pointer to zap_srv_pos_t is not
+ * NULL, then frees the memory pointed to by the pointer and sets it to NULL to
+ * avoid dangling pointers.
+ *
+ * @param positions Double pointer to a zap_srv_pos_t array to be freed.
+ */
+static void free_positions(zap_srv_pos_t **positions)
+{
+    if (!positions || !*positions) {
+        return;
+    }
+    free(*positions);
+    *positions = NULL;
+}
+
+/**
  * @brief Generates and populates the map with elements based on density.
  *
  * This function initializes and fills the given map structure with elements,
@@ -202,9 +239,9 @@ static void init_map(zap_srv_map_t *map)
 void generate_map(zap_srv_map_t *map)
 {
     ssize_t map_size;
-    float *current_density = NULL;
-    zap_srv_pos_t *positions = NULL;
     size_t element_targets[ZAP_SRV_ELEMENTS_QUANTITY] = {0};
+    __attribute__((cleanup(free_density)))float *current_density = NULL;
+    __attribute__((cleanup(free_positions)))zap_srv_pos_t *positions = NULL;
 
     if (!map || map->x == 0 || map->y == 0)
         return;
@@ -212,11 +249,11 @@ void generate_map(zap_srv_map_t *map)
         init_map(map);
     map_size = map->x * map->y;
     positions = generate_shuffled_positions(map->x, map->y);
-    if (!positions)
+    if (!positions || !keep_running(false)) {
         return;
+    }
     current_density = compute_density(map);
-    if (!current_density) {
-        free(positions);
+    if (!current_density || !keep_running(false)) {
         return;
     }
     compute_element_targets(element_targets, current_density, map_size);
