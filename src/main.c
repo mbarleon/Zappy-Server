@@ -13,7 +13,27 @@
 #include "egg/egg_functions.h"
 #include <cextend/exception.h>
 #include "parse_args/parse_args.h"
+#include "server/signals_handling.h"
 #include "string/string_entry_table.h"
+
+/**
+ * @brief Checks if the server should keep running.
+ *
+ * This function calls the keep_running function with 'false' as an argument to
+ * determine if the server should continue running. If not, it performs cleanup
+ * or error handling via END_TRY and returns an error code.
+ *
+ * @return ZAP_SRV_SUCCESS if the server should keep running, otherwise
+ * ZAP_SRV_ERROR.
+ */
+static int check_keep_running(void)
+{
+    if (!keep_running(false)) {
+        END_TRY;
+        return ZAP_SRV_ERROR;
+    }
+    return ZAP_SRV_SUCCESS;
+}
 
 /**
  * @brief Attempts to parse command-line arguments and handle exceptions.
@@ -41,7 +61,11 @@ static int try_parse_args(int ac, const char **av,
     TRY(code, except_ctxt) {
         parse_args(ac, av, ctxt);
         generate_map(&ctxt->map);
+        if (check_keep_running() == ZAP_SRV_ERROR)
+            return ZAP_SRV_ERROR;
         spawn_eggs(ctxt);
+        if (check_keep_running() == ZAP_SRV_ERROR)
+            return ZAP_SRV_ERROR;
     } CATCH(code, CEXTEND_EXCEPTION_BAD_ALLOC) {
         CEXTEND_LOG(CEXTEND_LOG_ERROR, fetch_string(ZAP_SRV_CAUGHT_ERROR),
             "parsing", get_exception_str(code));
