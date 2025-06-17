@@ -32,7 +32,7 @@ jobs:
 
       - name: Run coding style check in container
         run: |
-          docker run --rm --entrypoint bash -v "$PWD":"$PWD" -w "$PWD" ghcr.io/epitech/coding-style-checker:latest -c '
+          docker run --platform linux/amd64 --rm --entrypoint bash -v "$PWD":"$PWD" -w "$PWD" ghcr.io/epitech/coding-style-checker:latest -c '
             declare -i error=0
             DIR=$(pwd)
             check.sh $DIR $DIR
@@ -61,6 +61,9 @@ jobs:
             fi
           '
 
+      - name: Remove log file
+        run: rm -f coding-style-reports.log
+
   check_program_compilation_ubuntu:
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -77,6 +80,13 @@ jobs:
             echo "::notice::build.sh found."
           fi
 
+      - name: Install build dependencies
+        run: |
+          if ! { command -v cmake > /dev/null; } 2>&1; then
+            echo "::notice:: cmake not installed. Trying to install it."
+            sudo apt update && sudo apt install -y cmake
+          fi
+
       - name: Launch ./build.sh
         run: |
           if ./build.sh; then
@@ -86,7 +96,7 @@ jobs:
             exit 84
           fi
 
-      - name: Check shared library
+      - name: Check executable
         run: |
           executable="${EXECUTABLE_PATH}"
           if [ ! -x "$executable" ]; then
