@@ -28,6 +28,7 @@
 static const char *string_table[] = {
     "Missing string in string entry table.",
 
+    "Zappy Server version %s",
     "socket failed.",
     "accept failed.",
     "poll failed.",
@@ -38,7 +39,8 @@ static const char *string_table[] = {
     "Stopping server...",
     "%d SIGINT or SIGTERM detected, aborting.",
     ("USAGE: ./zappy_server -p port -x width -y height -n name1 name2 ... -c "
-        "clientsNb -f freq\n"),
+        "clientsNb [-f freq]\n       -h --help: display this message.\n       "
+        "-v --version: display the version.\n"),
     "Caught exception in %s: %s.",
     "Max clients reached.",
     "Client with fd %d connected: %s:%d",
