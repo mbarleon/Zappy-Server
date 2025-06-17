@@ -39,6 +39,6 @@ typedef struct {
     size_t max_clients_per_team;
 } zap_srv_parsed_context_t;
 
-void parse_args(int ac, const char **av, zap_srv_parsed_context_t *ctxt);
+bool parse_args(int ac, const char **av, zap_srv_parsed_context_t *ctxt);
 
 #endif /* !ZAP_SRV_PARSE_ARGS_H_ */

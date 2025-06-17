@@ -19,6 +19,7 @@
  * localization and maintainability.
  *
  * @var ZAP_SRV_STRING_MIN         Minimum value (sentinel).
+ * @var ZAP_SRV_START              Message for server start.
  * @var ZAP_SRV_SOCKET_FAIL        Socket creation failure.
  * @var ZAP_SRV_BIND_FAIL          Socket binding failure.
  * @var ZAP_SRV_GETSOCKNAME_FAIL   Failure retrieving socket name.
@@ -33,6 +34,7 @@
 typedef enum {
     ZAP_SRV_STRING_MIN = 0,
 
+    ZAP_SRV_START,
     ZAP_SRV_SOCKET_FAIL,
     ZAP_SRV_ACCEPT_FAIL,
     ZAP_SRV_POLL_FAIL,

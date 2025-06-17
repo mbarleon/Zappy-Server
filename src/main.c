@@ -13,6 +13,7 @@
 #include "egg/egg_functions.h"
 #include <cextend/exception.h>
 #include "parse_args/parse_args.h"
+#include "server/server_version.h"
 #include "server/signals_handling.h"
 #include "string/string_entry_table.h"
 
@@ -31,8 +32,7 @@
 static int run_zappy_init(int ac, const char **av,
     zap_srv_parsed_context_t *ctxt)
 {
-    parse_args(ac, av, ctxt);
-    if (!keep_running(false)) {
+    if (!parse_args(ac, av, ctxt) || !keep_running(false)) {
         return ZAP_SRV_ERROR;
     }
     generate_map(&ctxt->map);
@@ -137,13 +137,7 @@ int main(int ac, const char **av)
         printf(fetch_string(ZAP_SRV_USAGE));
         return ZAP_SRV_ERROR;
     }
-    for (int i = 1; i < ac; ++i) {
-        if (strcmp(av[i], "-help") == 0 || strcmp(av[i], "-h") == 0 ||
-            strcmp(av[i], "--help") == 0) {
-            printf(fetch_string(ZAP_SRV_USAGE));
-            return ZAP_SRV_SUCCESS;
-        }
-    }
+    CEXTEND_LOG(CEXTEND_LOG_INFO, fetch_string(ZAP_SRV_START), ZAP_SRV_VER);
     if (try_parse_args(ac, av, &ctxt) == ZAP_SRV_ERROR ||
         try_run_server(&ctxt) == ZAP_SRV_ERROR) {
         return keep_running(false) ? ZAP_SRV_ERROR : ZAP_SRV_SUCCESS;

@@ -6,6 +6,7 @@
 */
 
 #include "parse_args_internal.h"
+#include "../server/server_version.h"
 
 /**
  * @brief Checks if all required command-line flags have been initialized.
@@ -74,6 +75,35 @@ static zap_srv_flags_t parse_flags(const char **av,
 }
 
 /**
+ * @brief Checks for special command-line arguments such as help and version.
+ *
+ * This function examines the argument at index `i` in the argument vector
+ * `av`. If the argument is "-h" or "--help", it prints the usage information
+ * and returns true. If the argument is "-v" or "--version", it prints the
+ * version information and returns true. For any other argument, it returns
+ * false.
+ *
+ * @param av The argument vector (array of strings).
+ * @param i The current index in the argument vector to check.
+ * @return true if a special argument was found and handled, false otherwise.
+ */
+static bool check_special_args(const char **av, int i)
+{
+    if (strcmp(av[i], "-h") == 0 || strcmp(av[i], "--help") == 0) {
+        printf(fetch_string(ZAP_SRV_USAGE));
+        fflush(stdout);
+        return true;
+    }
+    if (strcmp(av[i], "-v") == 0 || strcmp(av[i], "--version") == 0) {
+        printf(fetch_string(ZAP_SRV_START), ZAP_SRV_VER);
+        printf("\n");
+        fflush(stdout);
+        return true;
+    }
+    return false;
+}
+
+/**
  * @brief Parses command-line arguments and populates the server context
  * structure.
  *
@@ -89,8 +119,9 @@ static zap_srv_flags_t parse_flags(const char **av,
  * @throws @throws CEXTEND_EXCEPTION_INVALID_ARGUMENT if a command-line
  * argument is wrong.
  * @throws CEXTEND_EXCEPTION_BAD_ALLOC if memory allocation fails.
+ * @return true if there is a special argument, false otherwise.
  */
-void parse_args(int ac, const char **av, zap_srv_parsed_context_t *ctxt)
+bool parse_args(int ac, const char **av, zap_srv_parsed_context_t *ctxt)
 {
     int i = 1;
     zap_srv_flags_t ret = ZAP_SRV_FLAG_UNKNOWN;
@@ -99,6 +130,9 @@ void parse_args(int ac, const char **av, zap_srv_parsed_context_t *ctxt)
     memset(ctxt, 0, sizeof(zap_srv_parsed_context_t));
     ctxt->server.frequency = 10000UL;
     while (i < ac && keep_running(false)) {
+        if (check_special_args(av, i) == true) {
+            return false;
+        }
         ret = parse_flags(av, ctxt, &i);
         if (ret == ZAP_SRV_FLAG_UNKNOWN) {
             THROW(CEXTEND_EXCEPTION_INVALID_ARGUMENT);
@@ -106,4 +140,5 @@ void parse_args(int ac, const char **av, zap_srv_parsed_context_t *ctxt)
         are_flags_init[ret] = true;
     }
     all_flags_init(are_flags_init);
+    return true;
 }
