@@ -22,7 +22,7 @@
  */
 static void all_flags_init(const bool are_flags_init[ZAP_SRV_FLAG_LEN])
 {
-    for (size_t i = 0; i < ZAP_SRV_FLAG_LEN; ++i) {
+    for (size_t i = 0; i < ZAP_SRV_FLAG_LEN && keep_running(false); ++i) {
         if (i != ZAP_SRV_FLAG_F && !are_flags_init[i]) {
             THROW(CEXTEND_EXCEPTION_INVALID_ARGUMENT);
         }
@@ -98,7 +98,7 @@ void parse_args(int ac, const char **av, zap_srv_parsed_context_t *ctxt)
 
     memset(ctxt, 0, sizeof(zap_srv_parsed_context_t));
     ctxt->server.frequency = 10000UL;
-    while (i < ac) {
+    while (i < ac && keep_running(false)) {
         ret = parse_flags(av, ctxt, &i);
         if (ret == ZAP_SRV_FLAG_UNKNOWN) {
             THROW(CEXTEND_EXCEPTION_INVALID_ARGUMENT);
