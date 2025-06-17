@@ -17,19 +17,30 @@
 #include "string/string_entry_table.h"
 
 /**
- * @brief Checks if the server should keep running.
+ * @brief Runs the Zappy server initialization logic.
  *
- * This function calls the keep_running function with 'false' as an argument to
- * determine if the server should continue running. If not, it performs cleanup
- * or error handling via END_TRY and returns an error code.
+ * This function parses command-line arguments, initializes the game map,
+ * spawns eggs, and checks if the server should keep running at each step.
  *
- * @return ZAP_SRV_SUCCESS if the server should keep running, otherwise
- * ZAP_SRV_ERROR.
+ * @param ac Argument count from the command line.
+ * @param av Argument vector from the command line.
+ * @param ctxt Pointer to the parsed server context structure.
+ * @return ZAP_SRV_SUCCESS on success, ZAP_SRV_ERROR on failure or if the
+ * server should stop.
  */
-static int check_keep_running(void)
+static int run_zappy_init(int ac, const char **av,
+    zap_srv_parsed_context_t *ctxt)
 {
+    parse_args(ac, av, ctxt);
     if (!keep_running(false)) {
-        END_TRY;
+        return ZAP_SRV_ERROR;
+    }
+    generate_map(&ctxt->map);
+    if (!keep_running(false)) {
+        return ZAP_SRV_ERROR;
+    }
+    spawn_eggs(ctxt);
+    if (!keep_running(false)) {
         return ZAP_SRV_ERROR;
     }
     return ZAP_SRV_SUCCESS;
@@ -59,13 +70,10 @@ static int try_parse_args(int ac, const char **av,
     cextend_exception_context_t *except_ctxt = INIT_TRY;
 
     TRY(code, except_ctxt) {
-        parse_args(ac, av, ctxt);
-        generate_map(&ctxt->map);
-        if (check_keep_running() == ZAP_SRV_ERROR)
+        if (run_zappy_init(ac, av, ctxt) == ZAP_SRV_ERROR) {
+            END_TRY;
             return ZAP_SRV_ERROR;
-        spawn_eggs(ctxt);
-        if (check_keep_running() == ZAP_SRV_ERROR)
-            return ZAP_SRV_ERROR;
+        }
     } CATCH(code, CEXTEND_EXCEPTION_BAD_ALLOC) {
         CEXTEND_LOG(CEXTEND_LOG_ERROR, fetch_string(ZAP_SRV_CAUGHT_ERROR),
             "parsing", get_exception_str(code));
@@ -138,7 +146,7 @@ int main(int ac, const char **av)
     }
     if (try_parse_args(ac, av, &ctxt) == ZAP_SRV_ERROR ||
         try_run_server(&ctxt) == ZAP_SRV_ERROR) {
-        return ZAP_SRV_ERROR;
+        return keep_running(false) ? ZAP_SRV_ERROR : ZAP_SRV_SUCCESS;
     }
     return ZAP_SRV_SUCCESS;
 }

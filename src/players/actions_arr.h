@@ -21,7 +21,7 @@
  * @note The size of the array determines the number of supported actions.
  */
 static bool (* const action_ptrs[])(zap_srv_parsed_context_t *,
-    zap_srv_player_t *, const char *arguments) = {
+    zap_srv_player_t *, const char *) = {
     &player_forward,
     &player_right,
     &player_left,

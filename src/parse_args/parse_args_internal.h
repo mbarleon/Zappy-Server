@@ -17,6 +17,7 @@
     #include "parse_args.h"
     #include <cextend/macro.h>
     #include <cextend/exception.h>
+    #include "../server/signals_handling.h"
 
     #define ZAP_SRV_FLAG_LEN 6
 
