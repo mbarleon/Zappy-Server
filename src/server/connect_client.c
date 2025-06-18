@@ -169,6 +169,7 @@ static void connect_client_err(zap_srv_player_t *client,
 {
     CEXTEND_LOG(CEXTEND_LOG_WARNING, fetch_string(error),
         client->sock.fd, client->team);
+    send_client("ko\n", &client->sock);
     THROW(CEXTEND_EXCEPTION_INVALID_ARGUMENT);
 }
 
