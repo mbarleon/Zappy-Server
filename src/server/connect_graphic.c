@@ -58,7 +58,8 @@ static void my_send_pnw(zap_srv_parsed_context_t *ctxt,
     zap_srv_player_t *client)
 {
     for (size_t i = 0; i < ctxt->server.num_clients; ++i) {
-        if (strcmp("GRAPHIC", ctxt->server.clients[i].team) != 0) {
+        if (ctxt->server.clients[i].team &&
+            strcmp("GRAPHIC", ctxt->server.clients[i].team) != 0) {
             send_player_infos(&(ctxt->server.clients[i]), client);
         }
     }

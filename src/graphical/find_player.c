@@ -27,7 +27,8 @@ size_t find_player_index(zap_srv_parsed_context_t *ctxt,
     zap_srv_player_t *client, ssize_t id)
 {
     for (size_t i = 0; i < ctxt->server.num_clients; ++i) {
-        if (strcmp("GRAPHIC", ctxt->server.clients[i].team) != 0 &&
+        if (ctxt->server.clients[i].team &&
+            strcmp("GRAPHIC", ctxt->server.clients[i].team) != 0 &&
             ctxt->server.clients[i].id == id) {
             return i;
         }

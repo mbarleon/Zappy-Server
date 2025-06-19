@@ -57,7 +57,8 @@ static void eject_players(zap_srv_parsed_context_t *ctxt,
         ((client->orientation + 1) % 4) + 1;
 
     for (size_t i = 0; i < ctxt->server.num_clients; ++i) {
-        if (strcmp("GRAPHIC", ctxt->server.clients[i].team) != 0 &&
+        if (ctxt->server.clients[i].team &&
+            strcmp("GRAPHIC", ctxt->server.clients[i].team) != 0 &&
             ctxt->server.clients[i].id != client->id &&
             ctxt->server.clients[i].pos.x == client->pos.x &&
             ctxt->server.clients[i].pos.y == client->pos.y) {

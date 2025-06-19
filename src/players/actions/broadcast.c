@@ -166,7 +166,8 @@ bool player_broadcast(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client,
     const char *arguments)
 {
     for (size_t i = 0; i < ctxt->server.num_clients; ++i) {
-        if (strcmp("GRAPHIC", ctxt->server.clients[i].team) != 0 &&
+        if (ctxt->server.clients[i].team &&
+            strcmp("GRAPHIC", ctxt->server.clients[i].team) != 0 &&
             ctxt->server.clients[i].id != client->id) {
                 send_broadcast_block(ctxt, client, &(ctxt->server.clients[i]),
                     arguments);

@@ -77,7 +77,8 @@ zap_srv_pos_list_t *find_players_positions(zap_srv_parsed_context_t *ctxt)
     zap_srv_pos_list_t *list = NULL;
 
     for (size_t i = 0; i < ctxt->server.num_clients; ++i) {
-        if (strcmp("GRAPHIC", ctxt->server.clients[i].team) != 0) {
+        if (ctxt->server.clients[i].team &&
+            strcmp("GRAPHIC", ctxt->server.clients[i].team) != 0) {
             add_in_pos_list(&list, &ctxt->server.clients[i].pos);
         }
     }

@@ -49,7 +49,7 @@ static const size_t requirements[7][7] = {
  * @return true if all requirements for the given level are met, false
  * otherwise.
  */
-static bool meets_requirements(zap_srv_parsed_context_t *ctxt,
+static bool meets_requirements(zap_srv_parsed_context_t *ctx,
     zap_srv_pos_t *pos, ssize_t level)
 {
     size_t nplayers = 0;
@@ -58,12 +58,12 @@ static bool meets_requirements(zap_srv_parsed_context_t *ctxt,
     if (level < 2 || level > 8)
         return false;
     for (const zap_srv_elements_list_t *tmp =
-        ctxt->map.elements[pos->x][pos->y]; tmp; tmp = tmp->next) {
+        ctx->map.elements[pos->x][pos->y]; tmp; tmp = tmp->next) {
         quantity_table[tmp->element] += 1;
     }
-    for (size_t i = 0; i < ctxt->server.num_clients; ++i)
-        if (strcmp("GRAPHIC", ctxt->server.clients[i].team) != 0 &&
-            ctxt->server.clients[i].level == level - 1)
+    for (size_t i = 0; i < ctx->server.num_clients; ++i)
+        if (ctx->server.clients[i].team && strcmp("GRAPHIC", ctx->server.
+            clients[i].team) != 0 && ctx->server.clients[i].level == level - 1)
             nplayers++;
     if (nplayers < requirements[level - 2][0])
         return false;
@@ -126,7 +126,8 @@ static void start_incantation(zap_srv_parsed_context_t *ctxt,
     zap_srv_player_list_t *player_list = NULL;
 
     for (size_t i = 0; i < ctxt->server.num_clients; ++i) {
-        if (strcmp("GRAPHIC", ctxt->server.clients[i].team) != 0 &&
+        if (ctxt->server.clients[i].team &&
+            strcmp("GRAPHIC", ctxt->server.clients[i].team) != 0 &&
             ctxt->server.clients[i].level == client->level &&
             ctxt->server.clients[i].id != client->id) {
             push_to_player_list(&player_list, &(ctxt->server.clients[i]));
@@ -267,7 +268,8 @@ static void end_incantation(zap_srv_parsed_context_t *ctxt,
     }
     client->player_list = NULL;
     send_pie(ctxt, client, worked);
-    consume_elements(ctxt, client);
+    if (worked && client->level >= 2)
+        consume_elements(ctxt, client);
 }
 
 /**
