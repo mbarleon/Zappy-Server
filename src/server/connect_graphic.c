@@ -66,30 +66,6 @@ static void my_send_pnw(zap_srv_parsed_context_t *ctxt,
 }
 
 /**
- * @brief Sends the server frequency to a graphic client in the "sgt" format.
- *
- * This function formats the server's frequency as a string using the "sgt"
- * command, then sends it to the specified graphic client. The message is
- * dynamically allocated and freed after sending.
- *
- * @param ctxt Pointer to the parsed server context containing server
- * $information.
- * @param client Pointer to the graphic client to which the frequency will be
- * sent.
- */
-static void my_send_sgt(zap_srv_parsed_context_t *ctxt,
-    zap_srv_player_t *client)
-{
-    char *block;
-
-    block = snprintf_alloc("sgt %ld\n", ctxt->server.frequency / 100UL);
-    if (block) {
-        send_client(block, &client->sock);
-        free(block);
-    }
-}
-
-/**
  * @brief Sends an "enw" message to a graphic client with egg information.
  *
  * This function formats and sends a message containing information about an
@@ -213,7 +189,7 @@ void send_graphic_connect_message(zap_srv_player_t *client,
     char *block;
 
     block = snprintf_alloc("msz %ld %ld\nsgt %ld\n", ctxt->map.x, ctxt->map.y,
-        ctxt->server.frequency);
+        ctxt->server.frequency / 100UL);
     if (block) {
         send_client(block, &client->sock);
         free(block);
@@ -224,7 +200,6 @@ void send_graphic_connect_message(zap_srv_player_t *client,
         }
     }
     my_send_pnw(ctxt, client);
-    my_send_sgt(ctxt, client);
     my_send_tna(ctxt, client);
     my_send_enw(ctxt, client);
 }

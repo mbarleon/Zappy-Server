@@ -7,6 +7,6 @@
 
 #ifndef ZAP_SRV_VER_H_
     #define ZAP_SRV_VER_H_
-    #define ZAP_SRV_VER "1.0.9"
+    #define ZAP_SRV_VER "1.0.10"
 
 #endif /* !ZAP_SRV_VER_H_ */
