@@ -25,10 +25,10 @@
     #include "../players/player_functions.h"
     #include "../string/message_entry_table.h"
 
-    #define ZAP_SRV_TIMEOUT 30
     #define ZAP_SRV_MAX_ELEVATION_WIN 6
     #define ZAP_SRV_COMMAND_LENGTH 2048
     #define ZAP_SRV_MAX_LINE_SIZE 2097152
+    #define ZAP_SRV_TIMEOUT_MULTIPLIER 100.0
     #define ZAP_SRV_RESOURCE_SPAWN_TIMER 20.0
 
 void init_server_socket(zap_srv_t *srv);

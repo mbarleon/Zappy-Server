@@ -8,6 +8,24 @@
 #include "server_internal.h"
 
 /**
+ * @brief Computes the server timeout value based on the given frequency.
+ *
+ * This function calculates a timeout value by dividing a predefined multiplier
+ * (ZAP_SRV_TIMEOUT_MULTIPLIER) by the provided frequency. If the result is
+ * less than or equal to zero, the function returns 1 to ensure a minimum
+ * timeout.
+ *
+ * @param frequency The frequency value used to compute the timeout.
+ * @return The computed timeout value (at least 1).
+ */
+static int compute_timeout(size_t frequency)
+{
+    const int freq = (int)(ZAP_SRV_TIMEOUT_MULTIPLIER / (double)frequency);
+
+    return freq > 0 ? freq : 1;
+}
+
+/**
  * @brief Checks if it's time to spawn new resources on the map and triggers
  * the spawn if needed.
  *
@@ -161,7 +179,8 @@ void run_server(zap_srv_parsed_context_t *ctxt)
     init_server(&ctxt->server);
     while (keep_running(false) && run_routine(ctxt)) {
         poll_count = poll(ctxt->server.fds,
-            (nfds_t)(ctxt->server.num_clients + 1), ZAP_SRV_TIMEOUT);
+            (nfds_t)(ctxt->server.num_clients + 1),
+            compute_timeout(ctxt->server.frequency));
         if (keep_running(false) && poll_count < 0) {
             CEXTEND_LOG(CEXTEND_LOG_INFO, fetch_string(ZAP_SRV_POLL_FAIL));
             break;
