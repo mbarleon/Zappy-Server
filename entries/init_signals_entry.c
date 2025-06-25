@@ -30,6 +30,6 @@ void init_signals_handler(void)
     memset(&sa, 0, sizeof(sa));
     sa.sa_sigaction = handle_signals;
     sa.sa_flags = SA_SIGINFO;
-    // sigaction(SIGINT, &sa, NULL);
+    sigaction(SIGINT, &sa, NULL);
     sigaction(SIGTERM, &sa, NULL);
 }
