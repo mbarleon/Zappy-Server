@@ -195,7 +195,7 @@ bool player_look(zap_srv_parsed_context_t *ctxt, zap_srv_player_t *client,
     zap_srv_pos_list_t *positions = find_players_positions(ctxt);
 
     if (!buf) {
-        send_client("ko", &client->sock);
+        send_client("ko\n", &client->sock);
         return false;
     }
     for (ssize_t i = 0; i <= client->level; ++i) {

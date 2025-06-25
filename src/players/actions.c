@@ -7,6 +7,7 @@
 
 #include "player_functions.h"
 #include "actions_arr.h"
+#include <cextend/logger.h>
 
 /**
  * @brief Executes a specific action for a player based on their action queue.
@@ -185,6 +186,7 @@ static void check_alive(zap_srv_parsed_context_t *ctxt,
     if (client->dead) {
         if (client->inventory[FOOD] <= 0) {
             send_client("dead\n", &client->sock);
+            CEXTEND_LOG(CEXTEND_LOG_INFO, "Client %ld died.", client->id);
             send_pdi(ctxt, client);
             decrease_team_count(ctxt, client->team);
             THROW(CEXTEND_EXCEPTION_SYSTEM_ERROR);

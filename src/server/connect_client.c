@@ -113,8 +113,8 @@ static size_t compute_slots_in_team(char *team, zap_srv_parsed_context_t *ctxt)
         if (tmp->num_clients >= tmp->max_clients) {
             return 0;
         }
-        return my_min(tmp->available_slots,
-            tmp->max_clients - tmp->num_clients);
+        return tmp->eggs ? my_min(tmp->available_slots,
+            tmp->max_clients - tmp->num_clients) : 0;
     }
     return 0;
 }
